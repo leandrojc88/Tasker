@@ -51,17 +51,35 @@ const sequelize = new Sequelize(
                     const model = data.model
                     toChangeData = await model.findOne({ where: data.where })
                 },
+                beforeUpdate: async (data, options) => {
+                    toChangeData = data.toJSON()
+                },
                 //utilizar el hook `afterBulkUpdate` para crear el historial despues de actualizado los modelos en la BD 
                 afterBulkUpdate: async (data, options) => {
                     const model = data.model
                     const history = require('./security/models/history')
                     const app = require('./index')
                     const changeData = data.attributes
-                    console.log(data);
                     await history.create({
                         table: typeof model.getTableName() === 'string'
                             ? model.getTableName()
                             : model.getTableName().schema + '.' + model.getTableName().tableName,
+                        action: 'Update',
+                        user: app.get('user') || 1,
+                        data: { toChangeData: toChangeData || { condiciones: data.where, msg: 'No se encontraros los datos para la consulta de Actualización' }, changeData }
+                    })
+                    toChangeData = {}
+                },
+                async afterUpdate(data, options){
+                    // console.log('afterUpdate--'.red, data._modelOptions.schema);
+                    //const model = data.model
+                    const history = require('./security/models/history')
+                    const app = require('./index')
+                    const changeData = data.toJSON()
+                    await history.create({
+                        table: typeof this.getTableName() === 'string'
+                            ? this.getTableName()
+                            : this.getTableName().schema + '.' + this.getTableName().tableName,
                         action: 'Update',
                         user: app.get('user') || 1,
                         data: { toChangeData: toChangeData || { condiciones: data.where, msg: 'No se encontraros los datos para la consulta de Actualización' }, changeData }

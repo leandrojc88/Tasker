@@ -41,9 +41,9 @@ const UserHandlerRouter = {
             const newuser = await UserModel.create({
                 user, full_name, pass: cryptoPass, rol
             })
-            
+
             newuser.setUnidad(inst__unidad)
-            newuser.setCargo(inst__cargo)           
+            newuser.setCargo(inst__cargo)
 
             res.json({
                 id: newuser._id, user: newuser.user,
@@ -65,12 +65,12 @@ const UserHandlerRouter = {
             const inst__unidad = await Unidad.findOne({ attributes: ['id', 'siglas'], where: { id: data.unidad } })
             const inst__cargo = await Cargo.findOne({ attributes: ['id', 'nombre'], where: { id: data.cargo } })
 
-            let inst__user = await UserModel.findByPk(_id)
+            let inst__user = await UserModel.findByPk(_id, { include: ['unidad', 'cargo'] })
             inst__user.user = data.user
             inst__user.full_name = data.full_name
             inst__user.rol = data.rol
-            inst__user.setUnidad(inst__unidad)
-            inst__user.setCargo(inst__cargo)
+            inst__user.set('unidadId', data.unidad)
+            inst__user.set('cargoId', data.cargo)
 
             if (data.change_pass)
                 inst__user.pass = data.pass

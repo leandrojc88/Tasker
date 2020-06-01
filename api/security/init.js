@@ -80,8 +80,11 @@ const init = async function () {
 }
 
 //inicializando base de datos
-init()
-
+//init()
+require('pg').types.setTypeParser(1114, stringValue => {
+    return new Date(stringValue + '+0000');
+    // e.g., UTC offset. Use any offset that you would like.
+  });
 /*
 async function test(){
 

@@ -20,3 +20,11 @@ task.belongsTo(table)
 
 task.hasMany(sub_task)
 sub_task.belongsTo(task)
+
+//sync
+module.exports = async function systemaData(){
+    await project.sync({alter: true})
+    await table.sync({alter: true})
+    await task.sync({alter: true})
+    await sub_task.sync({alter: true})
+}

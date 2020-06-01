@@ -1,5 +1,5 @@
-const db = require('../database')
-import { DataTypes } from 'sequelize';
+const db = require('../database'),
+    { DataTypes } = require('sequelize')
 
 const sub_task = db.define('sub_task', {
     id: {

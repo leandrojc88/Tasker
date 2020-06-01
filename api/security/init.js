@@ -13,6 +13,8 @@ const history = require('./models/history')
 const unidad = require('./models/unidad')
 const cargo = require('./models/cargo')
 
+const systemaData = require('../models/__relations')
+
 //inicializando base de datos
 const init = async function () {
     console.log(`
@@ -37,7 +39,7 @@ const init = async function () {
         console.log("> Tabla 'security.user' creada!".green);
 
         await history.sync({ alter: true });
-        console.log("> Tabla 'security.history' creada!".green);       
+        console.log("> Tabla 'security.history' creada!".green);
 
         const cargo__admin = await db.query(`SELECT * FROM security.cargo WHERE id = 1`);
         if (cargo__admin[0].length)
@@ -58,7 +60,7 @@ const init = async function () {
                 .then(result => console.log('insert Unidad U-System'))
                 .catch(err => console.log(`unidad existente | ${err.message}`.red))
         }
-        
+
         const user__admin = await db.query(`SELECT * FROM security.users WHERE _id = 1`);
         if (user__admin[0].length)
             console.log(`usuario existente`.red)
@@ -68,7 +70,7 @@ const init = async function () {
             VALUES ('root', 'Administrador Root Sistema','${cryptoPass}', 1, 1, 1, '${DataTypes.NOW}', '${DataTypes.NOW}' );`)
                 .then(result => console.log("> Usuario 'root' creado"))
                 .catch(err => console.log(`usuario existente | | ${err.message}`.red))
-        }       
+        }
 
         db.close()
 
@@ -79,12 +81,16 @@ const init = async function () {
     }
 }
 
+
+
 //inicializando base de datos
-//init()
-require('pg').types.setTypeParser(1114, stringValue => {
+init()
+systemaData()
+
+/* require('pg').types.setTypeParser(1114, stringValue => {
     return new Date(stringValue + '+0000');
     // e.g., UTC offset. Use any offset that you would like.
-  });
+  }); */
 /*
 async function test(){
 

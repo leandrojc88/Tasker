@@ -1,13 +1,18 @@
 <template>
   <v-app-bar app dense color="primary" dark justify="center">
-    <v-toolbar-title class="pl-0 mr-2">
-      <v-btn
-        class="text-capitalize title font-weight-light px-1"
-        text
-        outlined
-        @click="routing(root_url)"
-      ><v-icon >mdi-view-dashboard-outline</v-icon>{{title}}</v-btn>
-    </v-toolbar-title>
+    <slot name="title">
+      <v-toolbar-title class="pl-0 mr-2">
+        <v-btn
+          class="text-capitalize title font-weight-light px-1"
+          text
+          outlined
+          @click="routing(root_url)"
+        >
+          <v-icon>mdi-view-dashboard-outline</v-icon>
+          {{title}}
+        </v-btn>
+      </v-toolbar-title>
+    </slot>
 
     <!-- <v-divider class="mx-2 blue darken-1" vertical inset /> -->
 
@@ -18,61 +23,70 @@
     <v-spacer></v-spacer>
 
     <!-- Salir -->
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn icon @click="logout" v-on="on">
-          <v-icon>mdi-logout</v-icon>
-        </v-btn>
-      </template>
-      <span>Salir</span>
-    </v-tooltip>
+    <slot name="exit">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn icon @click="logout" v-on="on">
+            <v-icon color="accent">mdi-logout</v-icon>
+          </v-btn>
+        </template>
+        <span>Salir</span>
+      </v-tooltip>
+    </slot>
 
     <!-- Menu de Opciones Usuario-->
-    <v-menu :offset-x="true" :offset-y="true" transition="slide-y-transition">
-      <template v-slot:activator="{ on: menu }">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on: tooltip }">
-            <v-btn icon v-on="{ ...tooltip, ...menu }">
-              <!-- <v-icon>mdi-dots-vertical</v-icon> -->
-              <v-avatar color="light-blue darken-1" size="35">
-                <span class="white--text headline">{{firstLetter}}</span>
-              </v-avatar>
-            </v-btn>
-          </template>
-          <span>Opciones</span>
-        </v-tooltip>
-      </template>
+    <slot name="options">
+      <v-menu :offset-x="true" :offset-y="true" transition="slide-y-transition">
+        <template v-slot:activator="{ on: menu }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on: tooltip }">
+              <v-btn icon v-on="{ ...tooltip, ...menu }">
+                <!-- <v-icon>mdi-dots-vertical</v-icon> -->
+                <v-avatar color="security" size="35" class="avatar-border">
+                  <v-icon size="16" color="accent">mdi-account</v-icon>
+                </v-avatar>
+              </v-btn>
+            </template>
+            <span>Opciones</span>
+          </v-tooltip>
+        </template>
 
-      <v-card min-width="220">
-        <v-card-title class="pt-1 title justify-space-between">
-          {{currentUser.user.toUpperCase()}}
-          <v-icon>mdi-account</v-icon>
-        </v-card-title>
-        <v-card-subtitle class="pb-2 caption">{{currentUser.full_name}}</v-card-subtitle>
-        <v-divider class="my-0 mx-4" />
-        <v-card-text class="pt-1">
-          <v-list dense subheader flat>
-            <v-subheader>Módulos</v-subheader>
-            <v-list-item v-for="(item, index) in items" :key="index" @click="routing(item.descrip)">
-              <v-list-item-content>
-                <v-list-item-title>
-                  <v-icon left>mdi-view-module</v-icon>
-                  {{ item.descrip.firstUpperCase() }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider class="my-2" />
-            <v-list-item @click="dialogConfig = !dialogConfig">
-              <v-list-item-content>
-                <v-list-item-title>
-                  <v-icon left>mdi-settings-outline</v-icon>Configuración
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-      </v-card>
-    </v-menu>
+        <v-card min-width="220">
+          <v-card-title class="pt-1 title justify-space-between">
+            {{currentUser.user.toUpperCase()}}
+            <v-icon>mdi-account</v-icon>
+          </v-card-title>
+          <v-card-subtitle class="pb-2 caption">{{currentUser.full_name}}</v-card-subtitle>
+          <v-divider class="my-0 mx-4" />
+          <v-card-text class="pt-1">
+            <v-list dense subheader flat>
+              <v-subheader>Módulos</v-subheader>
+              <v-list-item
+                v-for="(item, index) in items"
+                :key="index"
+                @click="routing(item.descrip)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-icon left>mdi-view-module</v-icon>
+                    {{ item.descrip.firstUpperCase() }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider class="my-2" />
+              <v-list-item @click="dialogConfig = !dialogConfig">
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-icon left>mdi-settings-outline</v-icon>Configuración
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+        </v-card>
+      </v-menu>
+    </slot>
+
     <!-- <<<<<<<<<< END >>>>>>>>>> -->
 
     <!-- Modal de Configuración -->
@@ -142,5 +156,8 @@ export default {
   height: 2rem;
   width: 2rem;
   margin-right: 0.3em;
+}
+.avatar-border{
+  border: 1px solid #a7ffeb;
 }
 </style>

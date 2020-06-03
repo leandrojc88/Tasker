@@ -27,48 +27,23 @@
     ]
 }*/
 // importacion de los roles que tienen acceso al modulo
-import { R_ADMIN, R_INGENIERIA, R_COMERCIAL } from '../roles';
+import { R_ADMIN, R_SYSTEM_USER  } from '../roles';
 
 export default {
-    name: "Comercial",
+    name: "App",
     roles: [
         R_ADMIN.name,
-        R_INGENIERIA.name,
-        R_COMERCIAL.name
+        R_SYSTEM_USER.name
     ],
     routers: [
         {
             name: "dashboard",
-            descrip: "Panel principal del Modulo Comercial"
+            descrip: "Panel principal del Modulo Comercial",
         },
         {
-            name: "listado_catalogos",
-            descrip: "Listado de Catalogos"
-        },
-        {
-            name: "contratos_importantes",
-            descrip: "Contratos Importantes",
-            chieldrens: [],
-            notRoles: [
-                R_INGENIERIA.name
-            ],
-            permisions: {
-                [R_ADMIN.name]: [
-                    "manage"
-                ],
-                [R_COMERCIAL.name]: [
-                    "read", "create", "aprobar"
-                ]
-            }
-        },
-        {
-            name: "test",
-            descrip: "Panel prueba"
-        },
-        {
-            name: "producto",
-            descrip: "producto",
-            params: ["id"]
+            name: "project",
+            descrip: "Projectos",
+            params:['id','project_name']
         }
     ]
 }

@@ -4,7 +4,10 @@ const jwt = require('jsonwebtoken')
  * lista de rutas que no seran tenida en cuanta para verificar la autenticacion via _token
  */
 const NOT_LOGGIN = [
-    '/', '/loggin', '/adduser'
+    '/',
+    '/loggin',
+    '/adduser',
+    '/user/register'
 ]
 
 /**

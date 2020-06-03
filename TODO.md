@@ -1,0 +1,2 @@
+- [ ] icono de la app en el navegador
+- [ ] 

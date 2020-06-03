@@ -33,13 +33,18 @@ const User = sequelize.define('User', {
     paranoid: true,
 });
 
-User.beforeCreate((data, opt) => {
+User.beforeCreate(async (data, opt) => {
+    console.log(await User.findOne({ where: { user: data.user } }));
     if (data.pass.length < 8 && !opt.root)
         throw new Error('La contraseña debe tener mas de 8 caracteres')
+    if (await User.findOne({ where: { user: data.user } }))
+        throw new Error('El nombre de usuario ya está en uso.')
 })
-User.beforeBulkCreate((data, opt) => {
+User.beforeBulkCreate(async (data, opt) => {
     if (data.pass.length < 8 && !opt.root)
         throw new Error('La contraseña debe tener mas de 8 caracteres')
+    if (await User.findOne({ where: { user: data.user } }))
+        throw new Error('El nombre de usuario ya está en uso.')
 })
 
 // relations One - to - Many

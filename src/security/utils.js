@@ -52,6 +52,7 @@ export function initRouters() {
     modulesConfig.forEach(oneModule => {
 
         let children = []
+        let params_dashboard = ''
         if (oneModule.routers) {
 
             oneModule.routers.forEach(element => {
@@ -67,10 +68,14 @@ export function initRouters() {
                         rolesAuthCan: oneModule.roles.filter(e => !ELEMENT_Router.notRoles(element).some(f => e === f))
                     }
                 })
+
+                //parametro para el dashboard /: 
+                if (ELEMENT_Router.routersNamed(element) === "dashboard")
+                    params_dashboard = ELEMENT_Router.configParams(element)
             })
         }
         systemsRouter.push({
-            path: `/${oneModule.name.toLowerCase()}`,
+            path: `/${oneModule.name.toLowerCase()}${params_dashboard}`,//${params_dashboard}
             component: () => import(`@/views/Module${oneModule.name}View.vue`),
             children,
             meta: {
@@ -188,7 +193,6 @@ export const make = {
                     break;
             }
         })       
-        
         return mutations
 
     },

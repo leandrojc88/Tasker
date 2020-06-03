@@ -11,12 +11,12 @@ const express = require('express'),
 router.route('*')
   // seguridad mediante el _token
   .all(generalMiddleware.verifyTokenAccess)
-  
+
   // gusradar el ususario en variable global para utilizarlo en el *historial* 
   .post(generalMiddleware.triggerMiddleware)
   .put(generalMiddleware.triggerMiddleware)
   .delete(generalMiddleware.triggerMiddleware)
-  
+
 /**
  *  -------------------- USER SISTEMA ------------------------------
  */
@@ -27,6 +27,14 @@ router.post('/userSystem', userSystem.newUser)
 router.put('/userSystem/:id', userSystem.updateUser)
 router.delete('/userSystem/:id', userSystem.deleteUser)
 router.post('/userSystem/getDataByToken', userSystem.getDataByToken)
+
+router.post('/user/register', (req, res, next) => {
+  console.log('segister');
+  req.body.rol = 2 // rol de System User
+  req.body.unidad = 1 // unidad por defecto del sistema
+  req.body.cargo = 1  // cargo por defecto del sistema
+  next()
+}, userSystem.newUser)
 
 /**
  *  -------------------- HISTORY SISTEMA ------------------------------

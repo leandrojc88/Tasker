@@ -69,10 +69,9 @@ export const API_URL = 'http://localhost:3032/api';
  * tippo [Array] y se exporta
  * @returns {Array} 
  */
-import ComercialConfig from './modules_config/Comercial'
 import AdminConfig from './modules_config/Admin'
-import PruebaConfig from './modules_config/Prueba'
+import AppConfig from './modules_config/App'
 
 export const modulesConfig = [
-    AdminConfig, ComercialConfig, PruebaConfig
+    AdminConfig, AppConfig
 ]

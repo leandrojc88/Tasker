@@ -6,18 +6,53 @@ import axios from 'axios';
 
 // Modules
 import admin from './modules/admin';
+import app from './modules/app';
+import { resolve, reject } from 'q';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules: { admin },
+  modules: { admin, app },
   state: {
-    currentUser: {}
+    currentUser: {},
+    notify: {
+      visible: false,
+      msg: '...',
+      color: 'success',
+      time: 2000
+    },
+
+    confirm: {
+      visible: false,
+      msg: '...',
+      color: 'error',
+      action: () => '',
+      btn_ok: 'Confirmar',
+      btn_cancel: 'Cancelar'
+    }
   },
   mutations: {
     setCurrentUser(state, userdata) {
       Object.assign(state.currentUser, { ...userdata })
-    }
+    },
+    /**
+     * mutation para mostrar un `<v-snackbar>` con un mensaje
+     * @param {*} state 
+     * @param {{visible:boolean,msg:String,color:String,time:Number}} values - **Object** de configuracion para la
+     * notificación
+     */
+    showNotify(state, values) {
+      const notify = {
+        visible: true,
+        msg: values.msg || '...',
+        color: values.color || 'success',
+        time: values.time || 2000
+      }
+      Object.assign(state.notify, { ...notify })
+    },      
+    closeNotify(state) {
+      state.notify.visible = false
+    },
   },
   actions: {
     /**
@@ -57,7 +92,7 @@ export default new Vuex.Store({
 
       try {
         const { user, id } = auth.getUser()
-        auth.registerHeadersTokenAxios()        
+        auth.registerHeadersTokenAxios()
         const data = await axios.post("/userSystem/getDataByToken", { user, id })
         if (data.status >= 200 && data.status < 300) {
           const { user, full_name, rol } = data.data

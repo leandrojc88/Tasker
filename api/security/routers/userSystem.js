@@ -73,7 +73,7 @@ const UserHandlerRouter = {
             inst__user.set('cargoId', data.cargo)
 
             if (data.change_pass)
-                inst__user.pass = data.pass
+                inst__user.pass = cryptoPass
 
             inst__user.save()
             res.json(
@@ -90,7 +90,6 @@ const UserHandlerRouter = {
         try {
             const _id = req.params.id
             const user = await UserModel.destroy({ where: { _id } })
-            console.log("elimnar", user);
             res.json(user)
 
         } catch (error) {

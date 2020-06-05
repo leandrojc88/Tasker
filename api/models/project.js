@@ -11,12 +11,22 @@ const project = db.define('project', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    desciption: {
+    description: {
         type: DataTypes.STRING
     },
-    finalizado: {
-        type: DataTypes.BOOLEAN
+    is_dashboard: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    finished: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 })
+
+// relations
+const User = require('../security/models/userSystem')
+User.hasMany(project)
+project.belongsTo(User)
 
 module.exports = project

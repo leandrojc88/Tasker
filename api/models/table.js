@@ -1,5 +1,5 @@
 const db = require('../database'),
-{ DataTypes } = require('sequelize')
+    { DataTypes } = require('sequelize')
 
 
 const table = db.define('table', {
@@ -14,4 +14,7 @@ const table = db.define('table', {
     }
 })
 
+const project = require('./project')
+project.hasMany(table)
+table.belongsTo(project)
 module.exports = table

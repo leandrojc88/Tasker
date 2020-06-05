@@ -12,6 +12,7 @@
             "name": "contratos_importantes",        --> ** nombre de la ruta
             "descrip": "descripcion para mostrar",  --> ** descripcion que se modtrara en el panel de administracion
             "params" : ["params_name"],             --> parametros de la ruta ej: (path: '/ruta/:params_name')
+             props:{}                               --> definir las propiedades de la ruta
             "chieldrens": [],                       --> rutas hijas del componente o ruta 
             "notRoles": ["Comercial"],              --> de rolos:[] del modulo cuales no tiene acceso a esta ruta
             "permisions":[{                         --> config del contructor de CASL[] para las funcionalidades
@@ -27,7 +28,7 @@
     ]
 }*/
 // importacion de los roles que tienen acceso al modulo
-import { R_ADMIN, R_SYSTEM_USER  } from '../roles';
+import { R_ADMIN, R_SYSTEM_USER } from '../roles';
 
 export default {
     name: "App",
@@ -43,7 +44,7 @@ export default {
         {
             name: "project",
             descrip: "Projectos",
-            params:['id','project_name']
+            params: ['id', 'project_name']
         }
     ]
 }

@@ -18,4 +18,7 @@ const sub_task = db.define('sub_task', {
     }
 })
 
+const task = require('./task')
+task.hasMany(sub_task)
+sub_task.belongsTo(task)
 module.exports = sub_task

@@ -62,6 +62,7 @@ export function initRouters() {
                     path: ELEMENT_Router.routersNamed(element) === "dashboard" ? '' : `${ELEMENT_Router.routersNamed(element).toLowerCase()}${ELEMENT_Router.configParams(element)}`,
                     name: `${oneModule.name.toLowerCase()}-${ELEMENT_Router.routersNamed(element).toLowerCase()}`,
                     component: () => import(`@/components/${oneModule.name}/Pages/${ELEMENT_Router.toUpperFirst(element)}.vue`),
+                    props: element.props || {},
                     meta: {
                         requiresAuth: true,
                         // filtrado de los roles q pueden accedera a la ruta y se le eliminan los del [notRoles]
@@ -78,6 +79,7 @@ export function initRouters() {
             path: `/${oneModule.name.toLowerCase()}${params_dashboard}`,//${params_dashboard}
             component: () => import(`@/views/Module${oneModule.name}View.vue`),
             children,
+            props: oneModule.props || {},
             meta: {
                 requiresAuth: true,
                 rolesAuthCan: oneModule.roles
@@ -152,7 +154,7 @@ export const make = {
      * 
      * `number` -> set | increment | decrement
      *
-     *  `boolen` -> set | invert
+     * `boolen` -> set | invert
      * 
      * `others` -> set
      * @param {{}} state estado de algun store 
@@ -175,7 +177,16 @@ export const make = {
             // onekey[key, value]
             switch (typeof onekey[1]) {
                 case 'object':// array and object and null
-                    Object.assign(mutations, this.mutationsCRUD(onekey[0]))
+                    if (Array.isArray(onekey[1]))
+                        Object.assign(mutations, this.mutationsCRUD(onekey[0]))
+                    else { //para los {objets}
+                        const keyCamelCase = this.keyToCamelCase(onekey[0])
+                        Object.assign(mutations, {
+                            [`set${keyCamelCase}`]: function (state, items) {
+                                Object.assign(state[onekey[0]], { ...items })
+                            }
+                        })
+                    }
                     break;
                 case 'number':
                     Object.assign(mutations, this.mutationNumber(onekey[0]))
@@ -187,12 +198,12 @@ export const make = {
                     const keyCamelCase = this.keyToCamelCase(onekey[0])
                     Object.assign(mutations, {
                         [`set${keyCamelCase}`]: function (state, items) {
-                            state[keyValue] = items
+                            state[onekey[0]] = items
                         }
                     })
                     break;
             }
-        })       
+        })
         return mutations
 
     },
@@ -221,12 +232,12 @@ export const make = {
             ,
 
             [`update${keyCamelCase}`]: function (state, item) {
-                Object.assign(state[keyValue].find(el => el.id === item.id), item.data);
+                Object.assign(state[keyValue].find(el => el.id == item.id), item.data);
             }
             ,
 
             [`delete${keyCamelCase}`]: function (state, item) {
-                state[keyValue].splice(state[keyValue].findIndex(el => el.id === item.id), 1);
+                state[keyValue].splice(state[keyValue].findIndex(el => el.id == item.id), 1);
             }
         }
     },

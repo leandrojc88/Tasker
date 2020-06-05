@@ -1,16 +1,27 @@
 <template>
   <v-app>
-    <!-- <div class="d-flex"> -->
+    <!-- Notificación -->
+    <v-snackbar v-model="notify.visible" top :color="notify.color" :timeout="notify.time">
+      {{notify.msg}}
+      <v-icon dark @click="closeNotify">mdi-close</v-icon>
+    </v-snackbar>
+
+    <!-- Contenido -->
     <router-view />
-    <!-- </div> -->
+    
   </v-app>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "App",
-  data: () => ({
-    //
-  })
+  data: () => ({}),
+  computed: {
+    ...mapState(["notify"])
+  },
+  methods: {
+    ...mapMutations(["closeNotify"])
+  }
 };
 </script>

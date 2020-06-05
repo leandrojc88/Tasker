@@ -14,7 +14,7 @@
       <v-img src="@/assets/bg.jpg" height="92vh" aspect-ratio="1.5" position="center center">
         <v-navigation-drawer v-model="drawer" width="350" height="92vh" absolute class="px-2">
           <div class="d-flex flex-row-reverse">
-            <v-btn icon @click.stop="drawer = !drawer">
+            <v-btn icon @click.stop="drawer = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </div>
@@ -45,7 +45,7 @@
 
               <v-tooltip bottom color="primary">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" icon v-on="on">
+                  <v-btn color="primary" icon v-on="on" @click="dialog__project = true">
                     <v-icon>mdi-plus-circle-outline</v-icon>
                   </v-btn>
                 </template>
@@ -53,18 +53,33 @@
               </v-tooltip>
             </div>
 
+            <!-- Manage Project -->
+            <v-dialog
+              v-model="dialog__project"
+              transition="dialog-transition"
+              width="fit-content"
+              persistent
+            >
+              <manage-project @close="dialog__project = false" />
+            </v-dialog>
+
             <!-- list projects -->
-            <v-hover v-for="(item, key) in projects" :key="key" v-slot:default="{ hover }">
+            <v-hover v-for="(item, key) in list__projects" :key="key" v-slot:default="{ hover }">
               <div class="my-1 d-flex">
                 <v-icon size="18">mdi-chevron-right</v-icon>
-                <router-link class="hover-under grey--text text--darken-2" :to="`/app/project/${item}/${key}`">
-                  <span class="body-2">{{item}}</span>
+                <router-link
+                  class="hover-under grey--text text--darken-2"
+                  :to="`/app/project/${item.id}/${item.name}`"
+                >
+                  <span class="body-2">{{item.name}}</span>
                 </router-link>
 
                 <v-btn x-small class="ml-4" color="primary" icon v-if="hover">
                   <v-tooltip bottom color="primary">
                     <template v-slot:activator="{ on }">
-                      <v-icon v-on="on">mdi-checkbox-marked-circle-outline</v-icon>
+                      <v-btn color="primary" v-on="on" icon @click="finishProject(item.id)">
+                        <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
+                      </v-btn>
                     </template>
                     <span>Finalizar proyecto</span>
                   </v-tooltip>
@@ -82,43 +97,28 @@
 </template>
 
 <script>
-import Vue from "vue";
+import { mapState, mapActions } from "vuex";
 import Contacts from "@/components/App/Molecules/Contacts";
+import ManageProject from "../components/App/Molecules/ManageProject";
 
 export default {
   components: {
-    Contacts
+    Contacts,
+    ManageProject
   },
   data: () => ({
-    drawer: true,    
-    projects: [
-      "Proceso Comercial de la Grafica - ProGraf",
-      "VST - Vue Security Tool",
-      "Estudio de Idioma Ingles",
-      "Leer libro YDNJS",
-      "Ejercicios y Nutricion",
-      "Projectos Profesionales 3D",
-      "Proceso Comercial de la Grafica - ProGraf",
-      "VST - Vue Security Tool",
-      "Estudio de Idioma Ingles"
-      /* "Leer libro YDNJS",
-      "Ejercicios y Nutricion",
-      "Projectos Profesionales 3D",
-      "Proceso Comercial de la Grafica - ProGraf",
-      "VST - Vue Security Tool",
-      "Estudio de Idioma Ingles",
-      "Leer libro YDNJS",
-      "Ejercicios y Nutricion",
-      "Projectos Profesionales 3D",
-      "Proceso Comercial de la Grafica - ProGraf",
-      "VST - Vue Security Tool",
-      "Estudio de Idioma Ingles",
-      "Leer libro YDNJS",
-      "Ejercicios y Nutricion",
-      "Projectos Profesionales 3D",
-      "Terminar Tasker" */
-    ]
-  })
+    drawer: true,
+    dialog__project: false
+  }),
+  async beforeMount() {
+    this.loadProjects();
+  },
+  computed: {
+    ...mapState("app", ["list__projects"])
+  },
+  methods: {
+    ...mapActions("app", ["loadProjects", "finishProject"])
+  }
 };
 </script>
 <style scoped>

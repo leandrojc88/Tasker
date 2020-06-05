@@ -1,6 +1,6 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card :class="style__edit" class="mb-1" @dblclick="is__edit = !is__edit">
+    <v-card :class="style__edit" class="d-block mb-1" @dblclick="is__edit = !is__edit">
       <manage-task 
       v-if="is__edit" 
       :name='dname'

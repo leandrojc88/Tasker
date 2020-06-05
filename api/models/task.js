@@ -14,4 +14,7 @@ const task = db.define('task', {
     }
 })
 
+const table = require('./table')
+table.hasMany(task)
+    task.belongsTo(table)
 module.exports = task

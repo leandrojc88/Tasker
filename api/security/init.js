@@ -71,6 +71,8 @@ const init = async function () {
                 .then(result => console.log("> Usuario 'root' creado"))
                 .catch(err => console.log(`usuario existente | | ${err.message}`.red))
         }
+        
+        await systemaData()
 
         db.close()
 
@@ -85,7 +87,6 @@ const init = async function () {
 
 //inicializando base de datos
 init()
-systemaData()
 
 /* require('pg').types.setTypeParser(1114, stringValue => {
     return new Date(stringValue + '+0000');

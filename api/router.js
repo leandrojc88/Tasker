@@ -28,4 +28,17 @@ router.put('/cargo/:id', CARGO.update)
 router.delete('/cargo/:id', CARGO.delete)
 
 
+/**
+ *  -------------------- APP ------------------------------
+ */
+
+// ------ Project --------
+const Project = require('./routers/app/project')
+router.get('/project/:UserId', Project.getAllFromUser)
+router.get('/dashboard_project/:UserId', Project.getDashboard)
+router.post('/project', Project.create)
+router.put('/project/:id', Project.update)
+router.delete('/project/:id', Project.delete)
+router.put('/project/finish/:id', Project.finishProject)
+
 module.exports = router

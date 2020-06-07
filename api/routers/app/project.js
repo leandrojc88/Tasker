@@ -10,7 +10,7 @@ module.exports = {
                 order: [['id', 'asc']],
                 include: [{ model: User, attributes: ['_id', 'user', 'full_name', 'rol'] }]
             })
-            res.json(_obj)
+            res.json(_obj)            
 
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
@@ -37,7 +37,11 @@ module.exports = {
                     is_dashboard: true
                 }
             })
-            res.json(_obj[0])
+            const project = _obj[0].toJSON()
+            // generar tablas iniciales Open & Close
+            const Table = require('./table')
+            const tableOpenClose = await Table.createOpenAndClose(project.id)
+            res.json({ ...project, tableOpenClose })
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
         }
@@ -45,8 +49,11 @@ module.exports = {
     create: async (req, res) => {
         try {
             const _obj = await model.create(req.body)
-            res.json(_obj)
 
+            // generar tablas iniciales Open & Close
+            const Table = require('./table')
+            const tableOpenClose = await Table.createOpenAndClose(_obj.id)
+            res.json({ ..._obj.toJSON(), tableOpenClose })
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
         }

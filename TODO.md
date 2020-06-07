@@ -1,5 +1,9 @@
 - [ ] icono de la app en el navegador
+- [ ] clic en el fondo para hacer scroll
 
+
+### optimizacion
+- [ ] cargar la vista del ususario de forma asincrona y guardarla en el store para los casos de una conexion lenta
 
 ----
 

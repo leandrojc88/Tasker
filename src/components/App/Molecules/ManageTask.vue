@@ -17,13 +17,14 @@
         <v-icon>$close</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn x-small v-if="!edit" color="primary">Crear</v-btn>
-      <v-btn x-small v-else color="info">Guardar</v-btn>
+      <v-btn x-small v-if="!edit" color="primary" @click="createTask">Crear</v-btn>
+      <v-btn x-small v-else color="info" @click="saveTask">Guardar</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
 export default {
+
   props: {
     edit: Boolean,
     name: String
@@ -38,6 +39,11 @@ export default {
     this.dname = this.name;
   },
   methods: {
+    createTask(){
+      if(this.$refs.form.valid()){
+       
+      }
+    },
     eventClose() {
       this.$emit("on-close");
     }

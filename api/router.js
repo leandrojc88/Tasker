@@ -41,4 +41,12 @@ router.put('/project/:id', Project.update)
 router.delete('/project/:id', Project.delete)
 router.put('/project/finish/:id', Project.finishProject)
 
+// ------ Tables --------
+const Table = require('./routers/app/table')
+router.get('/table/:projectId', Table.getAllFromProject)
+router.get('/table/openandclose/:projectId', Table.getOpenAndClose)
+router.post('/table', Table.create)
+router.put('/table/:id', Table.update)
+router.delete('/table/:id', Table.delete)
+
 module.exports = router

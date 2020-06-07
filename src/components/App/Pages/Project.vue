@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0">
+  <v-container fluid class="pa-0" width="35000">
     <!-- Toolbar -->
     <v-toolbar color="white" style="background-color: rgba(255,255,255,.45) !important;" dense>
       <v-toolbar-title style="width: 100%;" class="d-flex justify-center">
@@ -37,6 +37,7 @@
         <div class="py-3">Seguro que desea eliminar el projecto</div>
       </v-sheet>
     </v-bottom-sheet>
+    
   </v-container>
 </template>
 <script>

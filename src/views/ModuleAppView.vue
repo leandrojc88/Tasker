@@ -77,7 +77,7 @@
                 <v-btn x-small class="ml-4" color="primary" icon v-if="hover">
                   <v-tooltip bottom color="primary">
                     <template v-slot:activator="{ on }">
-                      <v-btn color="primary" v-on="on" icon @click="finishProject(item.id)">
+                      <v-btn x-small color="primary" v-on="on" icon @click="finishedProject(item)">
                         <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
                       </v-btn>
                     </template>
@@ -89,6 +89,18 @@
           </v-sheet>
 
           <contacts class="contats-button py-2" />
+
+          <!-- Dialogo de confirmacion de ELIMINAR -->
+          <v-bottom-sheet v-model="confirm">
+            <v-sheet class="text-center" height="200px">
+              <v-btn class="ma-3 mt-6" outlined @click="confirm = false">Cancelar</v-btn>
+              <v-btn class="ma-3 mt-6" dark color="error" @click="confirmFinihsed()">Confirmar</v-btn>
+              <div class="py-3">
+                Seguro que desea finalizar el proyecto:
+                <strong>{{ project.name}}</strong>
+              </div>
+            </v-sheet>
+          </v-bottom-sheet>
         </v-navigation-drawer>
         <router-view></router-view>
       </v-img>
@@ -107,6 +119,10 @@ export default {
     ManageProject
   },
   data: () => ({
+    project: {
+      name: ""
+    },
+    confirm: false,
     drawer: true,
     dialog__project: false
   }),
@@ -117,7 +133,17 @@ export default {
     ...mapState("app", ["list__projects"])
   },
   methods: {
-    ...mapActions("app", ["loadProjects", "finishProject"])
+    ...mapActions("app", ["loadProjects", "finishProject"]),
+
+    finishedProject(project) {
+      this.confirm = true;
+      this.project = Object.assign({}, project);
+    },
+    confirmFinihsed() {
+      this.finishProject(this.project.id);
+      this.confirm = false;
+      this.$router.push({ path: "/app" });
+    }
   }
 };
 </script>

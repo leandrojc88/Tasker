@@ -21,15 +21,6 @@ export default new Vuex.Store({
       color: 'success',
       time: 2000
     },
-
-    confirm: {
-      visible: false,
-      msg: '...',
-      color: 'error',
-      action: () => '',
-      btn_ok: 'Confirmar',
-      btn_cancel: 'Cancelar'
-    }
   },
   mutations: {
     setCurrentUser(state, userdata) {
@@ -49,7 +40,7 @@ export default new Vuex.Store({
         time: values.time || 2000
       }
       Object.assign(state.notify, { ...notify })
-    },      
+    },
     closeNotify(state) {
       state.notify.visible = false
     },

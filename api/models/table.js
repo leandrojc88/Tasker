@@ -11,6 +11,9 @@ const table = db.define('table', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    possition:{
+        type:DataTypes.INTEGER
     }
 })
 

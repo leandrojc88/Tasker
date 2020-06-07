@@ -42,8 +42,17 @@ const state = {
                     { msg: `No se pudo eliminar el Proyecto: ${error.response.data.msg}`, color: 'error' },
                     { root: true })
             }
-        }
+        },
+
+        // ---------------------- Tables ---------------------------
+
+        async loadProjects({ commit, rootState }) {
+            const res = await axios.get(`/project/${rootState.currentUser.id}`)
+            commit('setListProjects', res.data)
+        },
     },
+
+
     getters = {
         getProjectByPk: (statet) => (id) => {
             if (typeof id === 'string')

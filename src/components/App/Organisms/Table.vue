@@ -48,16 +48,18 @@
 
     <!-- list Tasks -->
     <v-card-text class="table-overflow pa-2">
-      <task
-        v-for="(itemT,indexT) in list__tasks"
-        :key="indexT"
-        :idtask="itemT.id"
-        :name="itemT.name"
-        :idtable="idtable"
-        @createtask="createTask"
-        @edittask="editTask"
-        @deletetask="deleteTask"
-      />
+      <draggable :list="list__tasks" group="task" @change="onChange">
+        <task
+          v-for="(itemT,indexT) in list__tasks"
+          :key="indexT"
+          :idtask="itemT.id"
+          :name="itemT.name"
+          :idtable="idtable"
+          @createtask="createTask"
+          @edittask="editTask"
+          @deletetask="deleteTask"
+        />
+      </draggable>
       <manage-task
         :idtable="idtable"
         @createtask="createTask"
@@ -71,20 +73,6 @@
         <span class="text-capitalize caption">Nueva Tarea...</span>
       </v-btn>
     </v-card-text>
-
-    <!-- Next an Previus table -->
-    <v-sheet
-      v-if="is_not__close__open "
-      class="d-flex justify-space-between transparent pb-1 pt-0 px-2"
-    >
-      <v-btn icon small v-if="possition !== 1" @click="moveTo('left')">
-        <v-icon>mdi-arrow-left-bold-circle-outline</v-icon>
-      </v-btn>
-      <v-spacer></v-spacer>
-      <v-btn icon small v-if="!is__last" @click="moveTo('right')">
-        <v-icon>mdi-arrow-right-bold-circle-outline</v-icon>
-      </v-btn>
-    </v-sheet>
 
     <!-- Dialogo de confirmacion de ELIMINAR -->
     <v-bottom-sheet v-model="confirm">
@@ -103,15 +91,16 @@
 <script>
 import Task from "../Molecules/Task";
 import ManageTask from "../Molecules/ManageTask";
+import draggable from "vuedraggable";
 
 export default {
-  components: { Task, ManageTask },
+  components: { Task, ManageTask, draggable },
   props: {
     close: { type: Boolean },
     open: { type: Boolean },
     is__last: { type: Boolean },
     idtable: { type: Number },
-    possition: { type: Number },
+    position: { type: Number },
     name: { type: String, default: "..." }
   },
   data: () => ({
@@ -155,6 +144,24 @@ export default {
   methods: {
     // .......... Tasks .........
 
+    onChange(evt) {
+      if (evt.hasOwnProperty("added")) {
+        //add
+        const data = evt.added;
+        this.axios.put(`/task/movedtotable/${data.element.id}`, {
+          poss: data.newIndex + 1,
+          tableId: this.idtable
+        });
+      } else if (evt.hasOwnProperty("moved")) {
+        // move
+        const data = evt.moved;
+        this.axios.put(`/task/moved/${data.element.id}`, {
+          oldposs: data.oldIndex + 1,
+          newposs: data.newIndex + 1
+        });
+      }
+    },
+
     async loadDatas() {
       const res = await this.axios.get(`/task/${this.idtable}`);
       this.list__tasks = res.data;
@@ -180,7 +187,7 @@ export default {
     //........... table ..............
 
     createTable() {
-      this.$emit("createnewtable", this.possition);
+      this.$emit("createnewtable", this.position);
     },
     saveTable() {
       if (this.$refs.send.validate()) {
@@ -188,7 +195,7 @@ export default {
           // add
           this.$emit("sevetable", {
             name: this.edit__table__name,
-            possition: this.possition
+            position: this.position
           });
         } else {
           // edit
@@ -196,7 +203,7 @@ export default {
             "changetable",
             {
               name: this.edit__table__name,
-              possition: this.possition
+              position: this.position
             },
             this.idtable
           );
@@ -218,14 +225,6 @@ export default {
     cancelEdit() {
       this.is__edit = false;
     },
-    moveTo(direction) {
-      try {
-        this.axios.put(`/table/moveto/${this.idtable}`, { direction });
-        this.$emit("moveto", { idtable: this.idtable, direction });
-      } catch (error) {
-        console.log(error);
-      }
-    }
   }
 };
 </script>

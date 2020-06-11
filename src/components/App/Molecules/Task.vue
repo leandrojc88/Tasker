@@ -22,7 +22,7 @@
       </v-sheet>
 
       <!-- Menu select Tables (show__menu || hover) &&   open-on-hover-->
-      <v-sheet v-if="(show__menu || hover) &&  !is__edit">
+      <v-sheet v-if="false">
         <v-menu offset-y open-on-hover v-model="show__menu">
           <template v-slot:activator="{on}">
             <v-btn color="primary" small icon v-on="on">

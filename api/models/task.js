@@ -11,6 +11,10 @@ const task = db.define('task', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    position:{
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 })
 

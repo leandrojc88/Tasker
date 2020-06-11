@@ -56,5 +56,7 @@ router.get('/task/:tableId',Task.getAllFromTable)
 router.post('/task', Task.create)
 router.put('/task/:id', Task.update)
 router.delete('/task/:id', Task.delete)
+router.put('/task/movedtotable/:id', Task.movedToTable)
+router.put('/task/moved/:id', Task.moved)
 
 module.exports = router

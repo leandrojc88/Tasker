@@ -13,29 +13,30 @@
         v-if="task__close"
         open
         :idtable="task__open.id"
-        :possition="task__open.possition"
+        :position="task__open.position"
         :is__last="is__last(-1)"
         @createnewtable="createNewTable"
       />
-      <Table
-        v-for="(item,index) in list__tablesPositioned"
-        :key="index"
-        :idtable="item.id"
-        :possition="item.possition"
-        :name="item.name"
-        :is__last="is__last(index)"
-        @createnewtable="createNewTable"
-        @sevetable="saveTable"
-        @changetable="editTable"
-        @deletetable="deleteTable"
-        @moveto="moveTo"
-      />
+      <draggable class="d-flex" :list="list__tablesPositioned" group="tables" @change="onChange">
+        <Table
+          v-for="(item,index) in list__tablesPositioned"
+          :key="index"
+          :idtable="item.id"
+          :position="item.position"
+          :name="item.name"
+          :is__last="is__last(index)"
+          @createnewtable="createNewTable"
+          @sevetable="saveTable"
+          @changetable="editTable"
+          @deletetable="deleteTable"
+        />
+      </draggable>
       <Table
         v-if="task__close"
         class="mr-5"
         close
         :idtable="task__close.id"
-        :possition="task__close.possition"
+        :position="task__close.position"
       />
       <div style="opacity: 0;">.</div>
     </v-container>
@@ -45,9 +46,11 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import projects_mixin from "../mixin/projects_mixin";
+import draggable from "vuedraggable";
 
 export default {
   mixins: [projects_mixin],
+  components: { draggable },
   data: () => ({
     openclose: {}
   }),

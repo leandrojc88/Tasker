@@ -12,7 +12,7 @@ const table = db.define('table', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    possition:{
+    position:{
         type:DataTypes.INTEGER
     }
 })

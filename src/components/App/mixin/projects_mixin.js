@@ -19,7 +19,7 @@ export default {
         },
         list__tablesPositioned() {
             return this.list__tables.sort((a, b) =>
-                a.possition < b.possition ? true : false
+                a.position < b.position ? true : false
             );
         }
     },
@@ -38,33 +38,30 @@ export default {
         },
 
         /**
-         * move table in the espesific direction
-         * Castling of two tables
-         * @param {*} direction (left | right) directions to can move
+         * save the move of table
+         * @param {*} evt 
          */
-        moveTo(data) {
-            const current_index = this.list__tables.findIndex(el => el.id === data.idtable)
-            const table = this.list__tables.splice(current_index, 1)
-            if (data.direction === 'left') {
-                //move to left
-                table[0].possition -= 1
-                this.list__tables[current_index - 1].possition += 1
-                this.list__tables.splice(current_index - 1, 0, ...table)
-            } else {
-                table[0].possition += 1
-                this.list__tables[current_index].possition -= 1
-                this.list__tables.splice(current_index + 1, 0, ...table)
+        onChange(evt) {
+            if (evt.hasOwnProperty("moved")) {
+                // move
+                const data = evt.moved;
+                this.axios.put(`/table/moveto/${data.element.id}`, {
+                    oldposs: data.oldIndex + 1,
+                    newposs: data.newIndex + 1
+                });
             }
         },
+
         /**
          * Create a temporary board, and he saves it
-         * @param {*} poss possition the table in the list
+         * @param {*} poss position the table in the list
          */
         createNewTable(poss) {
+            console.log("poss",poss);
             this.list__tables.push({
                 id: -1,
                 name: "Creando Tablero...",
-                possition: poss + 1
+                position: poss + 1
             });
         },
 
@@ -132,8 +129,8 @@ export default {
 
                     // reposisioned after deleted table
                     this.list__tables = this.list__tables.map((el, idx) => {
-                        if (idx >= index) el.possition -= 1
-                        else el.possition
+                        if (idx >= index) el.position -= 1
+                        else el.position
                         return el
                     })
 

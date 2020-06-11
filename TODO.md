@@ -6,11 +6,12 @@
 - [ ] crear tareas en los tableros (tasks) - CRUD
 - [ ] permitir el flujo de las tareas por los tableros
   - [ ] un botón close para q la tarea valla directo al tablero Close
-- [ ] CRUD - Projects y un estado de terminado para ocultarlo
+- [x] CRUD - Projects y un estado de terminado para ocultarlo
 
 ## TODO
 
-- [ ] Drag & drop lib para vue
+- [ ] Revizar el Hooks update para cambiar por el watch
+- [x] Drag & drop lib para vue
 - [ ] icono de la app en el navegador
 - [ ] load data in the store para evitar la carga inecesaria cuando se mueven las tablas a left y right
 - [ ] clic en el fondo para hacer scroll

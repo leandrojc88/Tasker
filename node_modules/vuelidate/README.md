@@ -1,8 +1,37 @@
 # vuelidate
-[![codecov](https://codecov.io/gh/monterail/vuelidate/branch/master/graph/badge.svg)](https://codecov.io/gh/monterail/vuelidate)
-![gzip size](http://img.badgesize.io/monterail/vuelidate/master/dist/vuelidate.min.js.svg?compression=gzip)
+[![codecov](https://codecov.io/gh/vuelidate/vuelidate/branch/master/graph/badge.svg)](https://codecov.io/gh/vuelidate/vuelidate)
+![gzip size](http://img.badgesize.io/vuelidate/vuelidate/master/dist/vuelidate.min.js.svg?compression=gzip)
 
 > Simple, lightweight model-based validation for Vue.js
+
+## Sponsors
+
+### Gold
+
+<p align="center">
+  <a href="https://us.vuejs.org/?utm_campaign=Vue.js%20News&utm_medium=email&utm_source=Revue%20newsletter" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/560524372897562636/636900780481445888/ef278f141a55e3f44f50b8dbc1f9ca17.png" alt="VueConf.us" width="260px">
+  </a>
+</p>
+
+### Silver
+
+<p align="center">
+  <a href="https://www.nativescript.org/vue?utm_source=vuejsnewsletter&utm_medium=email&utm_campaign=nativescript-awareness" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/491313387129667594/602523039229542400/nativescript-logo.png" alt="NativeScript" width="170px">
+  </a>
+</p>
+
+### Bronze
+
+<p align="center">
+  <a href="https://www.vuemastery.com/" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267759130607630/Vue-Mastery-Big.png" alt="Vue Mastery logo" width="180px">
+  </a>
+  <a href="https://vuejobs.com/" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/560524372897562636/636900598700179456/vuejobs-logo.png" alt="Vue Mastery logo" width="140px">
+  </a>
+</p>
 
 ### Features & characteristics:
 * Model based
@@ -17,7 +46,7 @@
 
 ## Demo & docs
 
-[http://monterail.github.io/vuelidate/](http://monterail.github.io/vuelidate/)
+[https://vuelidate.netlify.com/](https://vuelidate.netlify.com/)
 
 ## Installation
 
@@ -104,7 +133,7 @@ $v: {
 }
 ```
 
-Checkout the docs for more examples: [https://monterail.github.io/vuelidate/](https://monterail.github.io/vuelidate/)
+Checkout the docs for more examples: [https://vuelidate.netlify.com/](https://vuelidate.netlify.com/)
 
 ## Contributing
 
@@ -130,8 +159,22 @@ npm test
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+## Contributors
+
+### Current
+
+- [Damian Dulisz](https://github.com/shentao)
+- [Natalia Tepluhina](https://github.com/NataliaTepluhina)
+- [Dobromir Hristov](https://github.com/dobromir-hristov)
+- [Ben Hong](https://github.com/bencodezen)
+
+### Emeriti
+
+Here we honor past contributors who have been a major part on this project.
+
+- [Monterail](https://github.com/monterail)
+- [Paweł Grabarz](https://github.com/Frizi)
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2016 Paweł Grabarz & Damian Dulisz

@@ -48,5 +48,13 @@ router.get('/table/openandclose/:projectId', Table.getOpenAndClose)
 router.post('/table', Table.create)
 router.put('/table/:id', Table.update)
 router.delete('/table/:id', Table.delete)
+router.put('/table/moveto/:id', Table.moveTo)
+
+// -------- Tasks ----------
+const Task = require('./routers/app/task')
+router.get('/task/:tableId',Task.getAllFromTable)
+router.post('/task', Task.create)
+router.put('/task/:id', Task.update)
+router.delete('/task/:id', Task.delete)
 
 module.exports = router

@@ -2,11 +2,11 @@
   <v-card min-width="300" width="300" height="max-content" color="bggrey" class="mx-2">
     <v-card-title primary-title class="justify-center pa-2">
       <!-- Table Name -->
-      <v-row no-gutters>
+      <v-row no-gutters style="height: 36px;" class="align-center">
         <v-col class="d-flex justify-center" cols="1">
           <v-btn
             icon
-            v-if="!close && !open && !is__edit"
+            v-if="is_not__close__open && !is__edit"
             :disabled="is__edit"
             @click="confirm = true"
           >
@@ -46,10 +46,24 @@
     </v-card-title>
     <v-divider></v-divider>
 
-    <!-- Tasks -->
-    <v-card-text>
-      <task v-for="(itemT,indexT) in list__tasks" :key="indexT" :name="itemT.name" />
-      <manage-task v-on:on-close="create__task=false" v-if="create__task" />
+    <!-- list Tasks -->
+    <v-card-text class="table-overflow pa-2">
+      <task
+        v-for="(itemT,indexT) in list__tasks"
+        :key="indexT"
+        :idtask="itemT.id"
+        :name="itemT.name"
+        :idtable="idtable"
+        @createtask="createTask"
+        @edittask="editTask"
+        @deletetask="deleteTask"
+      />
+      <manage-task
+        :idtable="idtable"
+        @createtask="createTask"
+        @on-close="create__task=false"
+        v-if="create__task"
+      />
 
       <!-- new Task -->
       <v-btn text small class="mt-2" @click="create__task = true">
@@ -57,6 +71,20 @@
         <span class="text-capitalize caption">Nueva Tarea...</span>
       </v-btn>
     </v-card-text>
+
+    <!-- Next an Previus table -->
+    <v-sheet
+      v-if="is_not__close__open "
+      class="d-flex justify-space-between transparent pb-1 pt-0 px-2"
+    >
+      <v-btn icon small v-if="possition !== 1" @click="moveTo('left')">
+        <v-icon>mdi-arrow-left-bold-circle-outline</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn icon small v-if="!is__last" @click="moveTo('right')">
+        <v-icon>mdi-arrow-right-bold-circle-outline</v-icon>
+      </v-btn>
+    </v-sheet>
 
     <!-- Dialogo de confirmacion de ELIMINAR -->
     <v-bottom-sheet v-model="confirm">
@@ -84,8 +112,7 @@ export default {
     is__last: { type: Boolean },
     idtable: { type: Number },
     possition: { type: Number },
-    name: { type: String, default: "..." },
-    tasks: { type: Array }
+    name: { type: String, default: "..." }
   },
   data: () => ({
     edit__mode: false,
@@ -101,28 +128,57 @@ export default {
         "No puede utilizar Open o Close"
     }
   }),
-  mounted() {
-    if (this.idtable === -2) this.is__edit = true;
+  // -------------------- Hooks -------------------------------
+
+  async beforeMount() {
+    if (this.idtable === -1) this.is__edit = true;
+    this.loadDatas();
   },
-  watch: {
-    tasks(v) {
-      this.assignTasks();
-    }
-  },
+  // -------------------- Computed -------------------------------
   computed: {
     table__name() {
       if (this.open) return "Open";
       if (this.close) return "Close";
       else return this.name;
+    },
+    is_not__close__open() {
+      return !this.close && !this.open;
     }
   },
+  watch: {
+    idtable(v) {
+      this.list__tasks = [];
+      this.loadDatas();
+    }
+  },
+  // -------------------- Methods -------------------------------
   methods: {
-    createTask() {
-      this.components;
+    // .......... Tasks .........
+
+    async loadDatas() {
+      const res = await this.axios.get(`/task/${this.idtable}`);
+      this.list__tasks = res.data;
     },
-    assignTasks() {
-      this.list__tasks = Object.assign({}, this.tasks);
+    createTask(task) {
+      this.list__tasks.push(task);
+      this.create__task = false;
     },
+
+    editTask(task) {
+      const poss = this.list__tasks.findIndex(el => el.id === task.id);
+      this.list__tasks.splice(poss, 1, {
+        id: task.id,
+        name: task.name,
+        tableId: task.tableId
+      });
+    },
+    deleteTask(idtask) {
+      const poss = this.list__tasks.findIndex(el => el.id === idtask);
+      this.list__tasks.splice(poss, 1);
+    },
+
+    //........... table ..............
+
     createTable() {
       this.$emit("createnewtable", this.possition);
     },
@@ -161,7 +217,22 @@ export default {
     },
     cancelEdit() {
       this.is__edit = false;
+    },
+    moveTo(direction) {
+      try {
+        this.axios.put(`/table/moveto/${this.idtable}`, { direction });
+        this.$emit("moveto", { idtable: this.idtable, direction });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };
 </script>
+
+<style scoped>
+.table-overflow {
+  max-height: 74vh;
+  overflow-y: auto;
+}
+</style>

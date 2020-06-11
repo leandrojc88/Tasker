@@ -123,7 +123,7 @@ export default {
       name: ""
     },
     confirm: false,
-    drawer: true,
+    drawer: false,
     dialog__project: false
   }),
   async beforeMount() {
@@ -142,7 +142,8 @@ export default {
     confirmFinihsed() {
       this.finishProject(this.project.id);
       this.confirm = false;
-      this.$router.push({ path: "/app" });
+      const go__path = "/app";
+      if (this.$route.path !== go__path) this.$router.push({ path: "/app" });
     }
   }
 };

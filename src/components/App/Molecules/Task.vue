@@ -16,34 +16,17 @@
       <!-- edit & Subtask  -->
       <v-sheet class="d-flex align-center" v-else>
         <v-card-text width="100px" class="pa-2 text--primary body-2">{{ dname }}</v-card-text>
-        <v-btn small icon v-if="hover && !is__edit">
+        <v-btn small icon v-if="hover && !is__edit" @click="openCardSubTask">
           <v-icon size="16">$edit</v-icon>
         </v-btn>
       </v-sheet>
 
       <!-- Menu select Tables (show__menu || hover) &&   open-on-hover-->
-      <v-sheet v-if="false">
-        <v-menu offset-y open-on-hover v-model="show__menu">
-          <template v-slot:activator="{on}">
-            <v-btn color="primary" small icon v-on="on">
-              <v-icon>$task</v-icon>
-            </v-btn>
-          </template>
-          <v-list class="pa-0">
-            <v-card outlined >
-              <!-- <v-card-title class="ma-0 pa-3 subtitle-2">Mover a otra Tabla:</v-card-title> -->
-              <v-card-text class="d-flex flex-column">
-                <!-- <v-divider class="mb-2"></v-divider> -->
-                <v-sheet class="mb-2 d-flex justify-space-between">
-                  <v-chip small class="mr-2" outlined color="blue darken-4" dark @click>Open</v-chip>
-                  <v-chip small color="red darken-4" outlined @click>Close</v-chip>
-                </v-sheet>
-                <v-chip small class="mb-2" color="primary" label outlined @click> <v-icon x-small left>$task</v-icon>En proceso</v-chip>
-                <v-chip small class="mb-2" color="primary" label outlined @click> <v-icon x-small left>$task</v-icon>Pendiente</v-chip>
-              </v-card-text>
-            </v-card>
-          </v-list>
-        </v-menu>
+      <v-sheet v-if="show_details" class="px-2 pb-1 caption">
+        <v-icon size="18">$checks</v-icon>
+        {{count_subtasks}}
+        <v-icon size="18" class="ml-2">mdi-calendar-clock</v-icon>2 dias
+        <span v-show="hover">(25/6/2020)</span>
       </v-sheet>
 
       <!-- Dialogo de confirmacion de ELIMINAR -->
@@ -62,14 +45,16 @@
 </template>
 <script>
 import ManageTask from "./ManageTask";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
+import CardSubTask from "../Organisms/CardSubTask";
 
 export default {
-  components: { ManageTask },
+  components: { ManageTask, CardSubTask },
   props: {
     idtask: Number,
     name: String,
-    idtable: Number
+    idtable: Number,
+    count_subtask: Object
   },
   data: () => ({
     confirm: false,
@@ -82,13 +67,23 @@ export default {
     dname: "",
     didtask: "",
     didtable: "",
+    dcount_subtask: null,
     rules: {
       require: val => !!val || "Campo obligatorio"
     }
   }),
   computed: {
+    ...mapState("app", ["taskId__selected", "task_count_subtask"]),
     style__edit() {
       return this.is__edit ? "" : "pr-2";
+    },
+    show_details() {
+      return !!this.count_subtasks;
+    },
+    count_subtasks() {
+      if (this.taskId__selected === this.idtask)
+        this.dcount_subtask = this.task_count_subtask;
+      return this.dcount_subtask;
     }
   },
   watch: {
@@ -100,11 +95,15 @@ export default {
     this.loadData();
   },
   methods: {
+    ...mapMutations("app", ["setDialogSubtask", "setTaskidSelected"]),
     ...mapMutations(["showNotify"]),
     loadData() {
       this.didtask = this.idtask;
       this.dname = this.name;
       this.didtable = this.idtable;
+      this.dcount_subtask = this.count_subtask.subtasks
+        ? `${this.count_subtask.done_subtask}/${this.count_subtask.subtasks}`
+        : "";
     },
     editMode() {
       this.is__edit = true;
@@ -137,13 +136,9 @@ export default {
         });
       }
     },
-
-    defineDragDrop(ev) {
-      // drag & drop
-      return function dragstart_handler(ev) {
-        // Add the target element's id to the data transfer object
-        ev.dataTransfer.setData("text/plain", ev.target.innerText);
-      };
+    openCardSubTask() {
+      this.setTaskidSelected(this.idtask);
+      this.setDialogSubtask(true);
     }
   }
 };

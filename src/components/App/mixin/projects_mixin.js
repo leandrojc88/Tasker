@@ -57,7 +57,6 @@ export default {
          * @param {*} poss position the table in the list
          */
         createNewTable(poss) {
-            console.log("poss",poss);
             this.list__tables.push({
                 id: -1,
                 name: "Creando Tablero...",

@@ -1,5 +1,7 @@
 const model = require('../../models/task')
 const { Op } = require("sequelize");
+const multer = require('multer')
+const path = require('path')
 
 module.exports = {
     getAllFromTable: async (req, res) => {
@@ -9,21 +11,34 @@ module.exports = {
                 where: { tableId },
                 order: [['position', 'asc']]
             })
-            res.json(_obj)
+
+            const model_subtask = require('../../models/sub_task')
+            let returnobj = []
+
+            for (const obj of _obj) {
+                const subtasks = await model_subtask.count({ where: { taskId: obj.id } })
+                const done_subtask = await model_subtask.count({ where: { taskId: obj.id, done: true } })
+                returnobj.push({ ...obj.toJSON(), subtasks, done_subtask })
+            }
+            res.json(returnobj)
 
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
         }
 
     },
-    async getJsonAllFromTable(tableId) {
-        const _obj = await model.findAll({
-            where: { tableId },
-            order: [['id', 'asc']]
-        })
-        return _obj.map(el => el.toJSON())
-    },
+    getImg: async (req, res) => {
+        try {
+            const { taskId } = req.params
+            // console.log(path.(__path, '../.../uploads/avatar.jpg'));
+            const app = require('../../index.js')
+            res.sendFile(path.join(app.get('url_upload'), '/uploads/avatar.jpg'))
 
+        } catch (error) {
+            res.status(500).send({ msg: `Error del sistema ${error}` })
+        }
+
+    },
     create: async (req, res) => {
         try {
             const _count = await model.count({ where: { tableId: req.body.tableId } })
@@ -129,6 +144,45 @@ module.exports = {
         } catch (error) {
             res.status(500).send({ msg: `${error}` })
         }
+    },
+    getMulter: () => {
+        const fileFilter = (req, file, cb) => {
+            const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+            if (!allowedTypes.includes(file.mimetype)) {
+                const error = new Error("Incorrect file");
+                error.code = "INCORRECT_FILETYPE";
+                return cb(error, false)
+            }
+            cb(null, true);
+        }
+
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, './api/uploads');
+            },
+            filename: (req, file, cb) => {
+                const fileName = file.originalname.toLowerCase().split(' ').join('-');
+                cb(null, fileName)
+            }
+        });
+
+        const upload = multer({
+            storage,
+            fileFilter,
+            limits: {
+                fileSize: 5000000
+            }
+        });
+
+        return upload.single('file')
+    },
+    upload: (req, res) => {
+
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        // res.json({ file: req.file })
+        res.sendFile('./api/uploads' + fileName)
+
+
     }
 
 

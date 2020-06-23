@@ -51,6 +51,7 @@ const triggerMiddleware = (req, res, next) => {
     if (token) {
         jwt.verify(token, app.get('key_pass'), (err, decoded) => {
             if (!err) {
+                console.log('user'.blue, decoded);
                 app.set('user', decoded.id)
                 next();
             } else

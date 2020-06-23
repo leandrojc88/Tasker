@@ -12,7 +12,14 @@
 
     <v-content app>
       <v-img src="@/assets/bg.jpg" height="92vh" aspect-ratio="1.5" position="center center">
-        <v-navigation-drawer v-model="drawer" width="350" height="92vh" absolute class="px-2">
+        <v-navigation-drawer
+          v-model="drawer"
+          width="350"
+          height="92vh"
+          temporary
+          absolute
+          class="px-2"
+        >
           <div class="d-flex flex-row-reverse">
             <v-btn icon @click.stop="drawer = false">
               <v-icon>mdi-close</v-icon>
@@ -90,6 +97,17 @@
 
           <contacts class="contats-button py-2" />
 
+          <!-- CardSubTask -->
+          <v-dialog
+            v-model="dialog__subtask"
+            transition="dialog-transition"
+            width="fit-content"
+            persistent
+            :scrollable="true"
+          >
+            <card-sub-task @close="closeCardSubTask"></card-sub-task>
+          </v-dialog>
+
           <!-- Dialogo de confirmacion de ELIMINAR -->
           <v-bottom-sheet v-model="confirm">
             <v-sheet class="text-center" height="200px">
@@ -109,14 +127,16 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import Contacts from "@/components/App/Molecules/Contacts";
 import ManageProject from "../components/App/Molecules/ManageProject";
+import CardSubTask from '../components/App/Organisms/CardSubTask';
 
 export default {
   components: {
     Contacts,
-    ManageProject
+    ManageProject,
+    CardSubTask
   },
   data: () => ({
     project: {
@@ -130,9 +150,10 @@ export default {
     this.loadProjects();
   },
   computed: {
-    ...mapState("app", ["list__projects"])
+    ...mapState("app", ["list__projects","dialog__subtask"])
   },
   methods: {
+    ...mapMutations("app",["setDialogSubtask","setTaskidSelected"]),
     ...mapActions("app", ["loadProjects", "finishProject"]),
 
     finishedProject(project) {
@@ -144,6 +165,10 @@ export default {
       this.confirm = false;
       const go__path = "/app";
       if (this.$route.path !== go__path) this.$router.push({ path: "/app" });
+    },
+    closeCardSubTask(){
+      this.setDialogSubtask(false)
+      this.setTaskidSelected(-1)
     }
   }
 };

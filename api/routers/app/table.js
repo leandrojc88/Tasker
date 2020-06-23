@@ -32,16 +32,6 @@ module.exports = {
                 where: { projectId, name: { [Op.or]: ['Open', 'Close'] } },
                 order: [['id', 'asc']]
             })
-            /* 
-                        // assing task
-                        const Task = require('./task')
-                        retur = []
-                        for (let table of _obj) {
-                            const tj = table.toJSON()
-                            const tasks = await Task.getJsonAllFromTable(tj.id)
-                            tj.tasks = tasks
-                            retur.push(tj)
-                        } */
             res.json(_obj)
 
         } catch (error) {

@@ -204,6 +204,7 @@ export const make = {
                     break;
             }
         })
+        console.log(mutations);
         return mutations
 
     },

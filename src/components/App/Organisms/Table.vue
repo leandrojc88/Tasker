@@ -55,6 +55,7 @@
           :idtask="itemT.id"
           :name="itemT.name"
           :idtable="idtable"
+          :count_subtask="{subtasks: itemT.subtasks, done_subtask: itemT.done_subtask}"
           @createtask="createTask"
           @edittask="editTask"
           @deletetask="deleteTask"
@@ -224,7 +225,7 @@ export default {
     },
     cancelEdit() {
       this.is__edit = false;
-    },
+    }
   }
 };
 </script>

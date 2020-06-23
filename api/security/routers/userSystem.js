@@ -109,11 +109,10 @@ const UserHandlerRouter = {
         let resp = { message: "acceso denegado, credenciales incorrectas!" }
 
         const logginUser = await UserModel.findOne({ where: { user, pass: cryptoPass } })
-
         if (logginUser) {
             const payload = {
                 user,
-                id: logginUser.id,
+                id: logginUser._id,
                 check: true
             };
             const _token = jwt.sign(payload, app.get('key_pass'), {

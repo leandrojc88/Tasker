@@ -1,6 +1,5 @@
 const express = require('express'),
   router = express.Router()
-
 /** 
  *  ------------------------------ RUTAS DE LA APP ------------------------------
  * definir las rutas utilizadas por la APP  router.get | post | put | delete 
@@ -8,12 +7,11 @@ const express = require('express'),
 
 // router.get('/test', (req, res) => res.send('test'))
 
+/**********************************************************
+ ************************** ADMIN ***************************
+ **********************************************************/
 
-/**
- *  -------------------- ADMIN ------------------------------
- */
-
- // ------ Unidades --------
+// ------ Unidades --------
 const UNIDADE = require('./security/routers/unidad')
 router.get('/unidad', UNIDADE.getAll)
 router.post('/unidad', UNIDADE.create)
@@ -28,9 +26,9 @@ router.put('/cargo/:id', CARGO.update)
 router.delete('/cargo/:id', CARGO.delete)
 
 
-/**
- *  -------------------- APP ------------------------------
- */
+/**********************************************************
+ ************************** APP ***************************
+ **********************************************************/
 
 // ------ Project --------
 const Project = require('./routers/app/project')
@@ -52,11 +50,24 @@ router.put('/table/moveto/:id', Table.moveTo)
 
 // -------- Tasks ----------
 const Task = require('./routers/app/task')
-router.get('/task/:tableId',Task.getAllFromTable)
+router.get('/task/:tableId', Task.getAllFromTable)
 router.post('/task', Task.create)
 router.put('/task/:id', Task.update)
 router.delete('/task/:id', Task.delete)
 router.put('/task/movedtotable/:id', Task.movedToTable)
 router.put('/task/moved/:id', Task.moved)
+
+router.get('/task/load_img/:id', Task.getImg)
+router.post('/task/upload_img/:id', Task.getMulter(), Task.update)
+// -------- Sub Tasks ----------
+const SubTask = require('./routers/app/subtask')
+router.get('/subtask/:taskId', SubTask.getAllFromTask)
+router.post('/subtask', SubTask.create)
+router.put('/subtask/:id', SubTask.update)
+router.delete('/subtask/:id', SubTask.delete)
+router.put('/subtask/changedone/:id', SubTask.changeDone)
+
+
+
 
 module.exports = router

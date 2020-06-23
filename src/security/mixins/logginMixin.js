@@ -1,6 +1,7 @@
 import { gotodefaultModule } from "@/security/utils";
 import auth from "@/security/auth";
 import { APP_NAME } from "@/security/config";
+import { mapMutations } from 'vuex';
 // *************** CASL **********************\\
 import { ability } from "@/security/abilitys";
 /**
@@ -19,7 +20,6 @@ import { ability } from "@/security/abilitys";
 export default {
     data: () => ({
         app_name: '',
-        error: false,
         show_pass: false,
         overlay: false,
         user: {
@@ -36,6 +36,7 @@ export default {
         this.app_name = APP_NAME
     },
     methods: {
+        ...mapMutations(['showNotify']),
         /**
          * verificar las credenciales del **Usuario** y ejecuta la Promise
          * dependiendo del resultado se registran los datos y
@@ -47,7 +48,6 @@ export default {
                 this.$store.dispatch("getUserDatas", this.user)
                     .then(response => {
                         this.overlay = false;
-                        this.error = !response;
                         if (response) {
                             auth.loggin(this.$store.state.currentUser);
                             this.$ability.update(ability(this.$store.state.currentUser.rol));
@@ -66,7 +66,7 @@ export default {
                                         "problemas de Configuración del Sistema. Contacte al adminsitrador"
                                     );
                                 });
-                        }
+                        } else this.showNotify({ msg: 'Acceso denegado. Credenciales incorrectas...', color: "error" })
                     });
             }
         }

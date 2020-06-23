@@ -5,8 +5,10 @@
 - [x] crear tableros (Tables) CRUD
 - [x] crear tareas en los tableros (tasks) - CRUD
 - [x] permitir el flujo de las tareas por los tableros
+- [ ] mostrar y recuperar projectos finalizados
 - [ ] CRUD - subtask
 - [ ] imagenes en las task
+- [ ] Asignacion de fecha y calculo de dias
 
 ## TODO
 

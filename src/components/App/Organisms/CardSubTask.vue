@@ -100,8 +100,8 @@
             </v-btn>
           </div>
           <v-sheet class="d-flex px-2 justify-space-between my-3">
-            <span class="headline">Miércoles, 20 de Julio 2020</span>
-            <span class="headline">25 días</span>
+            <span class="headline">{{date_show}}</span>
+            <span class="headline">{{count_days}} días</span>
           </v-sheet>
           <div class="d-flex justify-center">
             <v-date-picker
@@ -111,6 +111,8 @@
               class="mr-2"
               v-model="picker"
               full-width
+              :min="new Date().toISOString().substr(0, 10)"
+              first-day-of-week="1"
             >
               <v-spacer></v-spacer>
               <v-btn color="success" block :disabled="false">
@@ -148,7 +150,7 @@ export default {
     fileupload: [],
     list_subtasks: [],
     delete_subtask: null,
-    picker: new Date().toISOString().substr(0, 10)
+    picker: "2020-07-08"
   }),
   mounted() {
     this.loadDatas();
@@ -173,6 +175,18 @@ export default {
         subtasks: this.list_subtasks.length
       });
       return `${done.length}/${this.list_subtasks.length}`; //##.##
+    },
+    count_days() {
+      const count = new Date(this.picker);
+    },
+    date_show() {
+      console.log(this.picker);
+      return new Date(this.picker+' 10:00:00').toLocaleDateString("es-es", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
     }
   },
   // --------------------- Methods ----------------------

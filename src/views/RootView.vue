@@ -82,18 +82,6 @@
           </v-container>
         </v-sheet>
 
-        <!-- Mensaje de notificacion -->
-        <v-snackbar v-model="error" top color="error">
-          {{err_msg || 'Acceso denegado. Credenciales incorrectas...'}}
-          <v-btn text @click.native="error = false">Cerrar</v-btn>
-        </v-snackbar>
-
-        <!-- Mensaje de Correcta -->
-        <v-snackbar v-model="user__register" top color="success">
-          Usuario creado correctamente
-          <v-btn text @click.native="user__register = false">X</v-btn>
-        </v-snackbar>
-
         <!-- CARGANDO... -->
         <v-overlay :value="overlay">
           <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -137,6 +125,7 @@
  */
 import securityMixin from "@/security/mixins/logginMixin";
 import Contacts from "@/components/App/Molecules/Contacts";
+import { mapMutations } from "vuex";
 
 export default {
   components: {
@@ -145,9 +134,7 @@ export default {
   name: "RootView",
   mixins: [securityMixin],
   data: () => ({
-    err_msg: "",
     isLoggin: true,
-    user__register: false,
     register__user: {
       user: "",
       full_name: "",
@@ -169,18 +156,18 @@ export default {
   },
   // ----------------- Methods ----------------
   methods: {
+    ...mapMutations(["showNotify"]),
     onRegister() {
       if (this.$refs.form_reg.validate()) {
         // registrar usuario con rol system user
         this.axios
           .post("/user/register", this.register__user)
           .then(req => {
-            this.user__register = true;
+            this.showNotify({ msg: " Usuario creado correctamente" });
             this.cancelRegister();
           })
           .catch(err => {
-            this.error = true;
-            this.err_msg = err.response.data.msg;
+            this.showNotify({ msg: err.response.data.msg, color: "error" });
           });
       }
     },

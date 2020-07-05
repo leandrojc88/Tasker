@@ -6,7 +6,8 @@ const state = {
     taskId__selected: -1,
     list__projects: [],
     dashboard__project: {},
-    task_count_subtask: ''
+    task_count_subtask: '',
+    images: []
 },
     mutations = {
         ...make.mutations(state),
@@ -56,6 +57,11 @@ const state = {
             const res = await axios.get(`/project/${rootState.currentUser.id}`)
             commit('setListProjects', res.data)
         },
+        saveImage({ commit }, img) {
+            state.images.some(el => el.id === img.id)
+                ? commit('updateImages', { id: img.id, data: img })
+                : commit('addImages', img)
+        }
     },
 
 

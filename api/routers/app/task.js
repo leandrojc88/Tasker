@@ -2,6 +2,7 @@ const model = require('../../models/task')
 const { Op } = require("sequelize");
 const multer = require('multer')
 const path = require('path')
+const fs = require('fs')
 
 module.exports = {
     getAllFromTable: async (req, res) => {
@@ -18,7 +19,16 @@ module.exports = {
             for (const obj of _obj) {
                 const subtasks = await model_subtask.count({ where: { taskId: obj.id } })
                 const done_subtask = await model_subtask.count({ where: { taskId: obj.id, done: true } })
-                returnobj.push({ ...obj.toJSON(), subtasks, done_subtask })
+
+                //images
+                const dir = path.join(__dirname, `../../uploads/${obj.id}.png`)
+                let img = ''
+                if (fs.existsSync(dir)) {
+                    let base64 = Buffer.from(fs.readFileSync(dir)).toString('base64');
+                    img = 'data:image/png;base64,' + base64;
+                }
+
+                returnobj.push({ ...obj.toJSON(), subtasks, done_subtask, img })
             }
             res.json(returnobj)
 
@@ -29,10 +39,30 @@ module.exports = {
     },
     getImg: async (req, res) => {
         try {
-            const { taskId } = req.params
-            // console.log(path.(__path, '../.../uploads/avatar.jpg'));
-            const app = require('../../index.js')
-            res.sendFile(path.join(app.get('url_upload'), '/uploads/avatar.jpg'))
+            const { id } = req.params
+            var img = fs.readFile(path.join(__dirname, `../../uploads/${id}.png`), function (err, data) {
+                if (err) res.send(false)
+                else {
+                    let base64 = Buffer.from(data).toString('base64');
+                    base64 = 'data:image/png;base64,' + base64;
+                    res.send(base64);
+                }
+            });
+
+        } catch (error) {
+            res.status(500).send({ msg: `Error del sistema ${error}` })
+        }
+
+    },
+    deleteImg: async (req, res) => {
+        try {
+            const { id } = req.params
+            var img = fs.unlink(path.join(__dirname, `../../uploads/${id}.png`), function (err, data) {
+                if (err) res.send(false)
+                else {                    
+                    res.send(true);
+                }
+            });
 
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
@@ -161,7 +191,7 @@ module.exports = {
                 cb(null, './api/uploads');
             },
             filename: (req, file, cb) => {
-                const fileName = file.originalname.toLowerCase().split(' ').join('-');
+                const fileName = `${req.params.id}.png`;
                 cb(null, fileName)
             }
         });
@@ -175,16 +205,5 @@ module.exports = {
         });
 
         return upload.single('file')
-    },
-    upload: (req, res) => {
-
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        // res.json({ file: req.file })
-        res.sendFile('./api/uploads' + fileName)
-
-
     }
-
-
-
 }

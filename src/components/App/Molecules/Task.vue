@@ -1,6 +1,12 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card :class="style__edit" class="d-block mb-1" @dblclick="editMode">
+    <v-card
+      :class="style__edit"
+      class="d-block mb-1 pt-1"
+      style="padding-right: 0 !important;"
+      @dblclick="editMode"
+    >
+      <v-img max-width="90%" class="mx-auto" max-height="20rem" contain v-if="src" :src="src" />
       <!-- Edit Task -->
       <manage-task
         @edittask="editTask"
@@ -15,8 +21,14 @@
 
       <!-- edit & Subtask  -->
       <v-sheet class="d-flex align-center" v-else>
-        <v-card-text width="100px" class="pa-2 text--primary body-2">{{ dname }}</v-card-text>
-        <v-btn small icon v-if="hover && !is__edit" @click="openCardSubTask">
+        <v-card-text width="100px" class="pa-2 pr-6 text--primary body-2">{{ dname }}</v-card-text>
+        <v-btn
+          v-show="hover && !is__edit"
+          style="position: absolute; right: 2px;"
+          small
+          icon
+          @click="openCardSubTask"
+        >
           <v-icon size="16">$edit</v-icon>
         </v-btn>
       </v-sheet>
@@ -73,7 +85,7 @@ export default {
     }
   }),
   computed: {
-    ...mapState("app", ["taskId__selected", "task_count_subtask"]),
+    ...mapState("app", ["taskId__selected", "task_count_subtask", "images"]),
     style__edit() {
       return this.is__edit ? "" : "pr-2";
     },
@@ -84,6 +96,10 @@ export default {
       if (this.taskId__selected === this.idtask)
         this.dcount_subtask = this.task_count_subtask;
       return this.dcount_subtask;
+    },
+    src() {
+      const sel = this.images.find(el => el.id === this.idtask);
+      return sel ? sel.img : "";
     }
   },
   watch: {

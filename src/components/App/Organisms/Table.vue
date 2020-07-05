@@ -55,6 +55,7 @@
           :idtask="itemT.id"
           :name="itemT.name"
           :idtable="idtable"
+          :img="itemT.img"
           :count_subtask="{subtasks: itemT.subtasks, done_subtask: itemT.done_subtask}"
           @createtask="createTask"
           @edittask="editTask"
@@ -93,6 +94,7 @@
 import Task from "../Molecules/Task";
 import ManageTask from "../Molecules/ManageTask";
 import draggable from "vuedraggable";
+import { mapActions } from "vuex";
 
 export default {
   components: { Task, ManageTask, draggable },
@@ -143,6 +145,7 @@ export default {
   },
   // -------------------- Methods -------------------------------
   methods: {
+    ...mapActions("app", ["saveImage"]),
     // .......... Tasks .........
 
     onChange(evt) {
@@ -166,6 +169,12 @@ export default {
     async loadDatas() {
       const res = await this.axios.get(`/task/${this.idtable}`);
       this.list__tasks = res.data;
+      // save images
+      this.list__tasks.forEach(el => {
+        if (el.img) {
+          this.saveImage({ id: el.id, img: el.img });
+        }
+      });
     },
     createTask(task) {
       this.list__tasks.push(task);

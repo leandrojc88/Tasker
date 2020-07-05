@@ -58,7 +58,8 @@ router.put('/task/movedtotable/:id', Task.movedToTable)
 router.put('/task/moved/:id', Task.moved)
 
 router.get('/task/load_img/:id', Task.getImg)
-router.post('/task/upload_img/:id', Task.getMulter(), Task.update)
+router.post('/task/upload_img/:id', Task.getMulter(), Task.getImg)
+router.delete('/task/img/:id', Task.deleteImg)
 // -------- Sub Tasks ----------
 const SubTask = require('./routers/app/subtask')
 router.get('/subtask/:taskId', SubTask.getAllFromTask)

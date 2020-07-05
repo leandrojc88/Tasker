@@ -66,8 +66,15 @@
         <!-- ............. Imagen ................... -->
         <v-tab-item>
           <v-hover v-slot:default="{ hover }">
-            <v-img class="mx-auto my-3" content height="300" width="95%">
-              <v-btn fab small color="error" class="ml-2 mt-2" v-show="hover">
+            <v-img class="mx-auto my-3" contain height="300" width="95%" :src="src">
+              <v-btn
+                fab
+                x-small
+                color="error"
+                class="ml-2 mt-2"
+                v-show="hover && src"
+                @click="deleteImg"
+              >
                 <v-icon>$delete</v-icon>
               </v-btn>
             </v-img>
@@ -80,11 +87,11 @@
               outlined
               hide-details
               filled
+              clearable
               accept="image/png, image/jpeg, image/bmp"
               placeholder="Seleccione la Imagen"
-              @change="changeLoad"
             ></v-file-input>
-            <v-btn class="mt-2" block color="success" @click>
+            <v-btn class="mt-2" block color="success" :disabled="!fileupload" @click="submit">
               <v-icon size="20" left>mdi-image-edit-outline</v-icon>Guardar
             </v-btn>
           </v-form>
@@ -137,7 +144,7 @@
 <script>
 import SubTask from "../Molecules/SubTask";
 import ManageSubTask from "../Molecules/ManageSubTask";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   components: { SubTask, ManageSubTask },
   data: () => ({
@@ -147,7 +154,7 @@ export default {
     create__subtask: false,
     src: "",
     tab: null,
-    fileupload: [],
+    fileupload: null,
     list_subtasks: [],
     delete_subtask: null,
     picker: "2020-07-08"
@@ -162,7 +169,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("app", ["taskId__selected"]),
+    ...mapState("app", ["taskId__selected", "images"]),
     percentage() {
       const done = this.list_subtasks.filter(el => el.done === true);
       const porcentage = (done.length * 100) / this.list_subtasks.length;
@@ -181,7 +188,7 @@ export default {
     },
     date_show() {
       console.log(this.picker);
-      return new Date(this.picker+' 10:00:00').toLocaleDateString("es-es", {
+      return new Date(this.picker + " 10:00:00").toLocaleDateString("es-es", {
         weekday: "long",
         year: "numeric",
         month: "long",
@@ -192,32 +199,51 @@ export default {
   // --------------------- Methods ----------------------
   methods: {
     ...mapMutations(["showNotify"]),
-    ...mapMutations("app", ["setTaskCountSubtaskTo"]),
-    changeLoad(file) {
-      /* console.log("dentro", file);
-      console.log("fileupload", this.fileupload); */
+    ...mapMutations("app", [
+      "setTaskCountSubtaskTo",      
+      "deleteImages"
+    ]),
+    ...mapActions('app',['saveImage']),
+    async submit() {
       const fd = new FormData();
-      fd.append("file", file);
-      this.axios.post(`/task/upload_img/${1}`, fd);
+      fd.append("file", this.fileupload);
+      const res = await this.axios.post(
+        `/task/upload_img/${this.taskId__selected}`,
+        fd
+      );
+      this.src = res.data;
+      this.saveImage({ id: this.taskId__selected, img: res.data });
+      this.fileupload = null;
     },
     async loadDatas() {
-      if (this.taskId__selected != -1) {
-        const res = await this.axios.get(`/subtask/${this.taskId__selected}`);
-        this.list_subtasks = res.data;
+      this.src = "";
+      this.fileupload = null;
 
-        const res2 = await this.axios.get(
-          "/task/load_img/" + this.taskId__selected
+      if (this.taskId__selected != -1) {
+        const find_img = this.images.find(
+          el => el.id === this.taskId__selected
         );
-        //console.log(res2);
-        return res2.data;
+        if (find_img) this.src = find_img.img;
+        else {
+          const res = await this.axios.get(`/subtask/${this.taskId__selected}`);
+          this.list_subtasks = res.data;
+          const resImg = await this.axios.get(
+            "/task/load_img/" + this.taskId__selected
+          );
+          this.src = resImg.data || "";
+          if (resImg.data)
+            this.saveImage({ id: this.taskId__selected, img: resImg.data });
+        }
       }
     },
-    async url() {
-      const res2 = await this.axios.get(
-        "/task/load_img/" + this.taskId__selected
-      );
-      console.log(res2);
-      return res2.data;
+    async deleteImg() {
+      try {
+        await this.axios.delete(`/task/img/${this.taskId__selected}`);
+        this.src = "";
+        this.deleteImages({ id: this.taskId__selected });
+      } catch (error) {
+        this.showNotify({ msg: "Error al eliminar Imagen", color: "error" });
+      }
     },
     createSubTask(data) {
       this.list_subtasks.push(data);

@@ -52,7 +52,6 @@ module.exports = {
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
         }
-
     },
     deleteImg: async (req, res) => {
         try {

@@ -27,7 +27,7 @@
               @keypress.enter="saveTable"
               @keypress.esc="cancelEdit"
             ></v-text-field>
-            <v-btn small icon @click="is__edit = false">
+            <v-btn small icon @click="cancelEdit">
               <v-icon>$close</v-icon>
             </v-btn>
           </v-sheet>
@@ -94,7 +94,7 @@
 import Task from "../Molecules/Task";
 import ManageTask from "../Molecules/ManageTask";
 import draggable from "vuedraggable";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   components: { Task, ManageTask, draggable },
@@ -122,9 +122,8 @@ export default {
   }),
   // -------------------- Hooks -------------------------------
 
-  async beforeMount() {
+  async created() {
     if (this.idtable === -1) this.is__edit = true;
-    this.loadDatas();
   },
   // -------------------- Computed -------------------------------
   computed: {
@@ -145,7 +144,8 @@ export default {
   },
   // -------------------- Methods -------------------------------
   methods: {
-    ...mapActions("app", ["saveImage"]),
+    ...mapMutations("app", ["deleteTempTable"]),
+    ...mapActions("app", ["saveImage", "onEditTable", "onDeleteTable"]),
     // .......... Tasks .........
 
     onChange(evt) {
@@ -176,6 +176,7 @@ export default {
         }
       });
     },
+
     createTask(task) {
       this.list__tasks.push(task);
       this.create__task = false;
@@ -189,6 +190,7 @@ export default {
         tableId: task.tableId
       });
     },
+
     deleteTask(idtask) {
       const poss = this.list__tasks.findIndex(el => el.id === idtask);
       this.list__tasks.splice(poss, 1);
@@ -208,15 +210,10 @@ export default {
             position: this.position
           });
         } else {
-          // edit
-          this.$emit(
-            "changetable",
-            {
-              name: this.edit__table__name,
-              position: this.position
-            },
-            this.idtable
-          );
+          this.onEditTable({
+            table: { name: this.edit__table__name, position: this.position },
+            id_table: this.idtable
+          });
         }
         this.is__edit = false;
       }
@@ -229,11 +226,12 @@ export default {
       }
     },
     deleteTable() {
-      this.$emit("deletetable", this.idtable);
+      this.onDeleteTable(this.idtable);
       this.confirm = false;
     },
     cancelEdit() {
       this.is__edit = false;
+      this.deleteTempTable();
     }
   }
 };

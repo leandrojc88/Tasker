@@ -10,10 +10,10 @@
     <!-- Content -->
     <v-container fluid class="d-flex scrolled pt-2" style="height: 85vh;">
       <Table
-        v-if="task__close"
+        v-if="open_table"
         open
-        :idtable="task__open.id"
-        :position="task__open.position"
+        :idtable="open_table.id"
+        :position="open_table.position"
         :is__last="is__last(-1)"
         @createnewtable="createNewTable"
       />
@@ -27,16 +27,14 @@
           :is__last="is__last(index)"
           @createnewtable="createNewTable"
           @sevetable="saveTable"
-          @changetable="editTable"
-          @deletetable="deleteTable"
         />
       </draggable>
       <Table
-        v-if="task__close"
+        v-if="close_table"
         class="mr-5"
         close
-        :idtable="task__close.id"
-        :position="task__close.position"
+        :idtable="close_table.id"
+        :position="close_table.position"
       />
       <div style="opacity: 0;">.</div>
     </v-container>
@@ -57,12 +55,7 @@ export default {
   // -------------------- Hoocks -------------------------------
   async mounted() {
     await this.loadDashboardProject();
-    const res = await this.axios.get(`/table/${this.dashboard__project.id}`);
-    const resOpnCls = await this.axios.get(
-      `/table/openandclose/${this.dashboard__project.id}`
-    );
-    this.list__tables = res.data;
-    this.table__openclose = resOpnCls.data;
+    this.loadTables(this.dashboard__project.id);
   },
   // -------------------- Computed -------------------------------
 
@@ -77,7 +70,7 @@ export default {
      * Save table in the project, using the mixin saveTableToProject()
      */
     saveTable(table) {
-      this.saveTableToProject(table, this.dashboard__project.id);
+      this.saveTableToProject({ table, projectId: this.dashboard__project.id });
     }
   }
 };

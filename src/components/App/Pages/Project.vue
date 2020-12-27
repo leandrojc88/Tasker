@@ -4,7 +4,7 @@
     <v-toolbar color="white" class="bgopacity" dense>
       <v-toolbar-title style="width: 100%;" class="d-flex justify-center">
         <v-icon left>$project</v-icon>
-        {{ project.name.firstUpperCase()}}
+        {{ project.name.firstUpperCase() }}
       </v-toolbar-title>
       <v-btn class="ml-auto" color="teal darken-4" icon @click="onEditProject">
         <v-icon>mdi-pencil</v-icon>
@@ -17,10 +17,10 @@
     <!-- Content -->
     <v-container fluid class="d-flex scrolled pt-2" style="height: 85vh;">
       <Table
-        v-if="task__close"
+        v-if="open_table"
         open
-        :idtable="task__open.id"
-        :position="task__open.position"
+        :idtable="open_table.id"
+        :position="open_table.position"
         :is__last="is__last(-1)"
         @createnewtable="createNewTable"
       />
@@ -34,16 +34,14 @@
           :is__last="is__last(index)"
           @createnewtable="createNewTable"
           @sevetable="saveTable"
-          @changetable="editTable"
-          @deletetable="deleteTable"
         />
       </draggable>
       <Table
-        v-if="task__close"
+        v-if="close_table"
         class="mr-5"
         close
-        :idtable="task__close.id"
-        :position="task__close.position"
+        :idtable="close_table.id"
+        :position="close_table.position"
       />
       <div style="opacity: 0;">.</div>
     </v-container>
@@ -109,7 +107,7 @@ export default {
 
     // Save Tables
     saveTable(table) {
-      this.saveTableToProject(table, this.project.id);
+      this.saveTableToProject({ table, projectId: this.project.id });
     },
 
     // CRUD projects
@@ -142,13 +140,7 @@ export default {
           description: this.description
         }
       );
-
-      const res = await this.axios.get(`/table/${this.project.id}`);
-      const resOpnCls = await this.axios.get(
-        `/table/openandclose/${this.project.id}`
-      );
-      this.list__tables = res.data;
-      this.table__openclose = resOpnCls.data;
+      this.loadTables(this.project.id);
     }
   }
 };

@@ -12,12 +12,12 @@ const state = {
 
     dialog__subtask: false,
     taskId__selected: -1,
-    task_count_subtask: '',
+    task_count_subtask: {},
 },
     mutations = {
         ...make.mutations(state),
         setTaskCountSubtaskTo(state, obj) {
-            state.task_count_subtask = obj.subtasks ? obj.done_subtask + '/' + obj.subtasks : ''
+            state.task_count_subtask = obj || null
         },
 
         createTempTable(state, playload) {
@@ -27,13 +27,11 @@ const state = {
                 position: playload.poss
             });
         },
-
         createTable(state, newtable) {
             const find = state.list__tables.findIndex(e => e.id === -1)
             if (find != -1)
                 state.list__tables.splice(find, 1, newtable)
         },
-
         deleteTempTable(state) {
             const find = state.list__tables.findIndex(e => e.id === -1)
             if (find != -1)
@@ -75,7 +73,6 @@ const state = {
                     { root: true })
             }
         },
-
         async onUpdateProject({ commit }, project) {
             try {
                 const res = await axios.put(`/project/${project.id}`, project);
@@ -128,7 +125,6 @@ const state = {
                     { root: true })
             }
         },
-
         async onEditTable({ commit }, data) {
             try {
                 const { table, id_table } = data

@@ -58,7 +58,7 @@ module.exports = {
             const { id } = req.params
             var img = fs.unlink(path.join(__dirname, `../../uploads/${id}.png`), function (err, data) {
                 if (err) res.send(false)
-                else {                    
+                else {
                     res.send(true);
                 }
             });
@@ -72,7 +72,7 @@ module.exports = {
         try {
             const _count = await model.count({ where: { tableId: req.body.tableId } })
             const _obj = await model.create({ ...req.body, position: _count + 1 })
-            res.json(_obj)
+            res.json({ ..._obj.toJSON(), subtasks: 0, done_subtask: 0, img: '' })
 
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })

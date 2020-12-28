@@ -56,7 +56,8 @@
           :name="itemT.name"
           :idtable="idtable"
           :img="itemT.img"
-          :count_subtask="{subtasks: itemT.subtasks, done_subtask: itemT.done_subtask}"
+          :subtasks="itemT.subtasks"
+          :done_subtask="itemT.done_subtask"
           @createtask="createTask"
           @edittask="editTask"
           @deletetask="deleteTask"
@@ -94,7 +95,7 @@
 import Task from "../Molecules/Task";
 import ManageTask from "../Molecules/ManageTask";
 import draggable from "vuedraggable";
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   components: { Task, ManageTask, draggable },
@@ -124,9 +125,11 @@ export default {
 
   async created() {
     if (this.idtable === -1) this.is__edit = true;
+    if (this.idtable) this.loadDatas();
   },
   // -------------------- Computed -------------------------------
   computed: {
+    ...mapState("app", ["taskId__selected", "task_count_subtask"]),
     table__name() {
       if (this.open) return "Open";
       if (this.close) return "Close";
@@ -140,6 +143,13 @@ export default {
     idtable(v) {
       this.list__tasks = [];
       this.loadDatas();
+    },
+    task_count_subtask(v) {
+      let find = this.list__tasks.find(e => e.id == this.taskId__selected);
+      if (find) {
+        find.subtasks = v.subtasks;
+        find.done_subtask = v.done_subtask;
+      }
     }
   },
   // -------------------- Methods -------------------------------
@@ -183,12 +193,8 @@ export default {
     },
 
     editTask(task) {
-      const poss = this.list__tasks.findIndex(el => el.id === task.id);
-      this.list__tasks.splice(poss, 1, {
-        id: task.id,
-        name: task.name,
-        tableId: task.tableId
-      });
+      let taskFind = this.list__tasks.find(el => el.id === task.id);
+      taskFind.name = task.name;
     },
 
     deleteTask(idtask) {

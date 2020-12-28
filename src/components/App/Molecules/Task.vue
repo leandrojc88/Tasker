@@ -66,7 +66,8 @@ export default {
     idtask: Number,
     name: String,
     idtable: Number,
-    count_subtask: Object
+    subtasks: Number,
+    done_subtask: Number
   },
   data: () => ({
     confirm: false,
@@ -93,9 +94,8 @@ export default {
       return !!this.count_subtasks;
     },
     count_subtasks() {
-      if (this.taskId__selected === this.idtask)
-        this.dcount_subtask = this.task_count_subtask;
-      return this.dcount_subtask;
+      if (!this.subtasks) return false;
+      return `${this.done_subtask}/${this.subtasks}`;
     },
     src() {
       const sel = this.images.find(el => el.id === this.idtask);
@@ -117,9 +117,6 @@ export default {
       this.didtask = this.idtask;
       this.dname = this.name;
       this.didtable = this.idtable;
-      this.dcount_subtask = this.count_subtask.subtasks
-        ? `${this.count_subtask.done_subtask}/${this.count_subtask.subtasks}`
-        : "";
     },
     editMode() {
       this.is__edit = true;

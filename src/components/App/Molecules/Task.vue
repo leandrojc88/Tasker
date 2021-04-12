@@ -35,10 +35,11 @@
 
       <!-- Menu select Tables (show__menu || hover) &&   open-on-hover-->
       <v-sheet v-if="show_details" class="px-2 pb-1 caption">
-        <v-icon size="18">$checks</v-icon>
-        {{count_subtasks}}
-        <v-icon size="18" class="ml-2">mdi-calendar-clock</v-icon>2 dias
-        <span v-show="hover">(25/6/2020)</span>
+        <v-icon :color="doneColor" size="18">$checks</v-icon>
+        <span :class="doneColorText" class="pl-1">{{count_subtasks}}</span>
+        <v-icon size="18" class="ml-2">mdi-calendar-clock</v-icon>
+        <span class="pl-1">2 dias</span>
+        <span v-show="hover"> (25/6/2020)</span>
       </v-sheet>
 
       <!-- Dialogo de confirmacion de ELIMINAR -->
@@ -100,6 +101,13 @@ export default {
     src() {
       const sel = this.images.find(el => el.id === this.idtask);
       return sel ? sel.img : "";
+    },
+
+    doneColor() {
+      return this.done_subtask == this.subtasks ? "teal darken-1" : "";
+    },
+    doneColorText() {
+      return this.done_subtask == this.subtasks ? "teal--text text--darken-4" : "";
     }
   },
   watch: {

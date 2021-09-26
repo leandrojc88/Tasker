@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "./api",
-    "api": "nodemon ./api",
+    "api": "nodemon ./api"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",

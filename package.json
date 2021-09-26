@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "./api",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "api": "nodemon ./api",
     "init": "node ./api/security/init",
-    "start": "./api"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
@@ -23,6 +23,7 @@
     "moment": "^2.27.0",
     "mongoose": "^5.9.6",
     "morgan": "^1.10.0",
+    "multer": "^1.4.3",
     "pg": "^7.18.2",
     "pg-hstore": "^2.3.3",
     "roboto-fontface": "*",

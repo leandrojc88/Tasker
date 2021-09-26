@@ -4,10 +4,7 @@
   "private": true,
   "scripts": {
     "start": "./api",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "api": "nodemon ./api",
-    "init": "node ./api/security/init"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",

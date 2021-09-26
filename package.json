@@ -14,7 +14,7 @@
     "@casl/ability": "^3.4.0",
     "@casl/vue": "^0.5.1",
     "@mdi/font": "^4.9.95",
-    "axios": "^0.19.2",
+    "axios": "^0.21.4",
     "colors": "^1.4.0",
     "connect-history-api-fallback": "^1.6.0",
     "core-js": "^3.6.4",
@@ -35,7 +35,7 @@
     "vuex": "^3.1.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
+    "@babel/cli": "^7.15.7",
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",

@@ -1,6 +1,8 @@
 const model = require('../../models/project')
 const User = require('../../security/models/userSystem')
 
+const { createOpenAndClose } = require('./table')
+
 module.exports = {
     getAllFromUser: async (req, res) => {
         try {
@@ -10,7 +12,7 @@ module.exports = {
                 order: [['id', 'asc']],
                 include: [{ model: User, attributes: ['_id', 'user', 'full_name', 'rol'] }]
             })
-            res.json(_obj)            
+            res.json(_obj)
 
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
@@ -39,8 +41,7 @@ module.exports = {
             })
             const project = _obj[0].toJSON()
             // generar tablas iniciales Open & Close
-            const Table = require('./table')
-            const tableOpenClose = await Table.createOpenAndClose(project.id)
+            const tableOpenClose = await createOpenAndClose(project.id)
             res.json({ ...project, tableOpenClose })
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })
@@ -52,7 +53,7 @@ module.exports = {
 
             // generar tablas iniciales Open & Close
             const Table = require('./table')
-            const tableOpenClose = await Table.createOpenAndClose(_obj.id)
+            const tableOpenClose = await createOpenAndClose(_obj.id)
             res.json({ ..._obj.toJSON(), tableOpenClose })
         } catch (error) {
             res.status(500).send({ msg: `Error del sistema ${error}` })

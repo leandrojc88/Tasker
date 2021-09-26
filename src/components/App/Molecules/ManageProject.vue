@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   props: {
@@ -65,48 +65,31 @@ export default {
     }
   },
   methods: {
-    ...mapMutations("app", ["addListProjects", "updateListProjects"]),
-    ...mapMutations(["showNotify"]),
+    ...mapActions("app", ["onAddProject", "onUpdateProject"]),
 
     async submit() {
       if (this.$refs.form.validate()) {
-        try {
-          if (!this.edit) {
-            //add
-            const res = await this.axios.post("/project", {
-              name: this.name,
-              description: this.description,
-              UserId: this.currentUser.id
-            });
-            this.addListProjects(res.data);
-            this.showNotify({ msg: "Proyecto creado !" });
-          } else {
-            //update
-            const res = await this.axios.put(`/project/${this.id}`, {
-              name: this.name,
-              description: this.description
-            });
-            this.updateListProjects({
-              id: this.id,
-              data: {
-                name: this.name,
-                description: this.description,
-                UserId: this.currentUser.id
-              }
-            });
-            if (this.$route.params.project_name !== this.name)
-              this.$router.push({
-                path: `/app/project/${this.id}/${this.name}`
-              });
-            this.showNotify({ msg: "Proyecto editado !" });
-          }
-          this.onClose();
-        } catch (error) {
-          this.showNotify({
-            msg: `Error en creación o edición de proyecto: ${error}`,
-            color: "error"
+        if (!this.edit) {
+          //add
+          await this.onAddProject({
+            name: this.name,
+            description: this.description,
+            UserId: this.currentUser.id
           });
+        } else {
+          //update
+          await this.onUpdateProject({
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            UserId: this.currentUser.id
+          });
+          if (this.$route.params.project_name !== this.name)
+            this.$router.push({
+              path: `/app/project/${this.id}/${this.name}`
+            });
         }
+        this.onClose();
       }
     },
     onClose() {

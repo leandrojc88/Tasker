@@ -27,7 +27,7 @@
               @keypress.enter="saveTable"
               @keypress.esc="cancelEdit"
             ></v-text-field>
-            <v-btn small icon @click="is__edit = false">
+            <v-btn small icon @click="cancelEdit">
               <v-icon>$close</v-icon>
             </v-btn>
           </v-sheet>
@@ -56,7 +56,8 @@
           :name="itemT.name"
           :idtable="idtable"
           :img="itemT.img"
-          :count_subtask="{subtasks: itemT.subtasks, done_subtask: itemT.done_subtask}"
+          :subtasks="itemT.subtasks"
+          :done_subtask="itemT.done_subtask"
           @createtask="createTask"
           @edittask="editTask"
           @deletetask="deleteTask"
@@ -94,7 +95,7 @@
 import Task from "../Molecules/Task";
 import ManageTask from "../Molecules/ManageTask";
 import draggable from "vuedraggable";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   components: { Task, ManageTask, draggable },
@@ -122,12 +123,13 @@ export default {
   }),
   // -------------------- Hooks -------------------------------
 
-  async beforeMount() {
+  async created() {
     if (this.idtable === -1) this.is__edit = true;
-    this.loadDatas();
+    if (this.idtable) this.loadDatas();
   },
   // -------------------- Computed -------------------------------
   computed: {
+    ...mapState("app", ["taskId__selected", "task_count_subtask"]),
     table__name() {
       if (this.open) return "Open";
       if (this.close) return "Close";
@@ -141,11 +143,19 @@ export default {
     idtable(v) {
       this.list__tasks = [];
       this.loadDatas();
+    },
+    task_count_subtask(v) {
+      let find = this.list__tasks.find(e => e.id == this.taskId__selected);
+      if (find) {
+        find.subtasks = v.subtasks;
+        find.done_subtask = v.done_subtask;
+      }
     }
   },
   // -------------------- Methods -------------------------------
   methods: {
-    ...mapActions("app", ["saveImage"]),
+    ...mapMutations("app", ["deleteTempTable"]),
+    ...mapActions("app", ["saveImage", "onEditTable", "onDeleteTable"]),
     // .......... Tasks .........
 
     onChange(evt) {
@@ -176,19 +186,17 @@ export default {
         }
       });
     },
+
     createTask(task) {
       this.list__tasks.push(task);
       this.create__task = false;
     },
 
     editTask(task) {
-      const poss = this.list__tasks.findIndex(el => el.id === task.id);
-      this.list__tasks.splice(poss, 1, {
-        id: task.id,
-        name: task.name,
-        tableId: task.tableId
-      });
+      let taskFind = this.list__tasks.find(el => el.id === task.id);
+      taskFind.name = task.name;
     },
+
     deleteTask(idtask) {
       const poss = this.list__tasks.findIndex(el => el.id === idtask);
       this.list__tasks.splice(poss, 1);
@@ -208,15 +216,10 @@ export default {
             position: this.position
           });
         } else {
-          // edit
-          this.$emit(
-            "changetable",
-            {
-              name: this.edit__table__name,
-              position: this.position
-            },
-            this.idtable
-          );
+          this.onEditTable({
+            table: { name: this.edit__table__name, position: this.position },
+            id_table: this.idtable
+          });
         }
         this.is__edit = false;
       }
@@ -229,11 +232,12 @@ export default {
       }
     },
     deleteTable() {
-      this.$emit("deletetable", this.idtable);
+      this.onDeleteTable(this.idtable);
       this.confirm = false;
     },
     cancelEdit() {
       this.is__edit = false;
+      this.deleteTempTable();
     }
   }
 };

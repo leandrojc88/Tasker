@@ -76,7 +76,10 @@ export default {
           };
           const res = await this.axios.put(`/task/${this.idtask}`, data);
           if (res.data) {
-            this.$emit("edittask", { id: this.idtask, ...data });
+            this.$emit("edittask", {
+              id: this.idtask,
+              ...data
+            });
             this.showNotify({ msg: "Tarea editada satisfactoriamente" });
           } else throw new Error("Error al editar tarea");
         } catch (error) {

@@ -130,7 +130,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 import Contacts from "@/components/App/Molecules/Contacts";
 import ManageProject from "../components/App/Molecules/ManageProject";
-import CardSubTask from '../components/App/Organisms/CardSubTask';
+import CardSubTask from "../components/App/Organisms/CardSubTask";
 
 export default {
   components: {
@@ -150,10 +150,10 @@ export default {
     this.loadProjects();
   },
   computed: {
-    ...mapState("app", ["list__projects","dialog__subtask"])
+    ...mapState("app", ["list__projects", "dialog__subtask"])
   },
   methods: {
-    ...mapMutations("app",["setDialogSubtask","setTaskidSelected"]),
+    ...mapMutations("app", ["setDialogSubtask", "setTaskidSelected"]),
     ...mapActions("app", ["loadProjects", "finishProject"]),
 
     finishedProject(project) {
@@ -166,9 +166,9 @@ export default {
       const go__path = "/app";
       if (this.$route.path !== go__path) this.$router.push({ path: "/app" });
     },
-    closeCardSubTask(){
-      this.setDialogSubtask(false)
-      this.setTaskidSelected(-1)
+    closeCardSubTask() {
+      this.setDialogSubtask(false);
+      this.setTaskidSelected(-1);
     }
   }
 };

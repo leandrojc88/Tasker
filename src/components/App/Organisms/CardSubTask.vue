@@ -199,11 +199,8 @@ export default {
   // --------------------- Methods ----------------------
   methods: {
     ...mapMutations(["showNotify"]),
-    ...mapMutations("app", [
-      "setTaskCountSubtaskTo",      
-      "deleteImages"
-    ]),
-    ...mapActions('app',['saveImage']),
+    ...mapMutations("app", ["setTaskCountSubtaskTo", "deleteImages"]),
+    ...mapActions("app", ["saveImage"]),
     async submit() {
       const fd = new FormData();
       fd.append("file", this.fileupload);
@@ -225,8 +222,6 @@ export default {
         );
         if (find_img) this.src = find_img.img;
         else {
-          const res = await this.axios.get(`/subtask/${this.taskId__selected}`);
-          this.list_subtasks = res.data;
           const resImg = await this.axios.get(
             "/task/load_img/" + this.taskId__selected
           );
@@ -234,6 +229,8 @@ export default {
           if (resImg.data)
             this.saveImage({ id: this.taskId__selected, img: resImg.data });
         }
+        const res = await this.axios.get(`/subtask/${this.taskId__selected}`);
+        this.list_subtasks = res.data;
       }
     },
     async deleteImg() {

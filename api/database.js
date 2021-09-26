@@ -13,6 +13,7 @@ const sequelize = new Sequelize(
     configs.DB_PASSWORD,
     {
         host: configs.DB_HOST,
+        port: configs.DB_PORT,
         dialect: configs.DB_DIALECT,
         logging: false,
         define: {

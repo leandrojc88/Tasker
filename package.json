@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./api/index.js",
+    "start": "run api && nodemon ./api/index.js",
+    "init": "node ./api/security/init",
     "api": "nodemon ./api"
   },
   "dependencies": {

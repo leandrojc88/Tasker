@@ -12,7 +12,7 @@ const express = require('express'),
 
 app
   //   .set('port', process.env.PORT)
-  .set('port',process.env.PORT || 3032)
+  .set('port',process.env.PORT || 3000)
   .set('key_pass', KEY_PASS)
   .set('url_upload', __dirname)
   //para parsear application/json

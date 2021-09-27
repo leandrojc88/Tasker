@@ -61,3 +61,4 @@ Cargo.hasMany(User)
 User.belongsTo(Cargo)
 
 module.exports = User
+// export default User

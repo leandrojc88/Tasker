@@ -59,7 +59,7 @@ export const VST_VERSION = 'VST v1.1.0'
 export const APP_NAME = 'Tasker'
 
 //  DB >> direccion pro defecto de Axios - API
-export const API_URL = 'http://localhost:3032/api';
+export const API_URL = 'http://localhost:3000/api';
 // export const API_URL = 'http://192.168.150.108:3030'
 
 // ---------------------------- MODULES CONFIG --------------------------------

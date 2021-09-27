@@ -16,6 +16,9 @@ const sequelize = new Sequelize(
         port: configs.DB_PORT,
         dialect: configs.DB_DIALECT,
         logging: false,
+        dialectOptions: {
+            ssl: true
+        },
         define: {
             //stop the auto-pluralization performed by Sequelize
             freezeTableName: true,
@@ -71,7 +74,7 @@ const sequelize = new Sequelize(
                     })
                     toChangeData = {}
                 },
-                async afterUpdate(data, options){
+                async afterUpdate(data, options) {
                     // console.log('afterUpdate--'.red, data._modelOptions.schema);
                     //const model = data.model
                     const history = require('./security/models/history')

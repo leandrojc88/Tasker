@@ -32,7 +32,7 @@ este es el modulo principal de la App, donde se crean y planifican los proyectos
 
 ![image-20210927164304107](\md-img\nuevo proyecto.png)
 
-![image-20210927164720669](/md-img\dashboard.png)
+![image-20210927164720669](/md-img/dashboard.png)
 
 ![image-20210927164844853](./md-img\edit task.png)
 

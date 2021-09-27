@@ -16,9 +16,9 @@ const sequelize = new Sequelize(
         port: configs.DB_PORT,
         dialect: configs.DB_DIALECT,
         logging: false,
-        dialectOptions: {
-            ssl: true
-        },
+        // dialectOptions: {
+        //     ssl: true
+        // },
         define: {
             //stop the auto-pluralization performed by Sequelize
             freezeTableName: true,

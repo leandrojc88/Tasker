@@ -1,9 +1,20 @@
 # TASKER
 
-> App para el control de tareas, Inspirada en sistemas como trello y asana
+App para el control de tareas, Inspirada en sistemas como trello y asana
+
+la plataforma se divide en dos Módulos **Admin** y **App**, a los cuales se puede acceder según el rol del usuario
+
+### Modulo Admin
+
+este modulo solo tendrá acceso los *administradores*, modulo con las funcionalidades para la parte administrativa del sistema:
+
+- gestión de **Usuarios** del sistema 
+
+
 
 ## Estructura
-### Projectos
+
+### Proyectos
 > se pueden crear `Proyectos` independientes para una mejor agrupación y estructura de las tareas, estos permiten ser finalizados
 
 ### Table (Tablas)
@@ -13,7 +24,7 @@
 ### Task (tareas)
 > Las tareas que se van creando para ir moviendo por los diferentes estados y describen las tablas hasta llegar a la tabla `Close` que describe cuendo una tarea fue resuelta 
 
-- **subtasks** lista de subtareas de la tarea, deben ser masrcadas como resueltas a medida que se les de solución
+- **subtasks** lista de subtareas de la tarea, deben ser marcadas como resueltas a medida que se les de solución
 - **imagen** imagenes que sirben como guías para dar solución a las subtareas y tarea 
 - **tiempo** planificación de los tiempos de resolución de la tarea
 

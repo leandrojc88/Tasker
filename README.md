@@ -22,7 +22,7 @@ este modulo solo tendrá acceso los *administradores*, modulo con las funcionali
 - nomencladores **Unidad y Cargo** estas funcionalidades son parte de la estructura creada, como Framework base de esta plataforma 
 - el panel de usuarios muestra los datos del usuario autenticado y los módulos que tiene permiso a acceder
 
-![image-20210927163404909](md-img\admin dashboard.png)
+![image-20210927163404909](/md-img/admin dashboard.png)
 
 ## Modulo App
 
@@ -30,11 +30,11 @@ este es el modulo principal de la App, donde se crean y planifican los proyectos
 
 
 
-![image-20210927164304107](\md-img\nuevo proyecto.png)
+![image-20210927164304107](/md-img/nuevo proyecto.png)
 
 ![image-20210927164720669](/md-img/dashboard.png)
 
-![image-20210927164844853](./md-img\edit task.png)
+![image-20210927164844853](/md-img/edit task.png)
 
 ## Estructura
 

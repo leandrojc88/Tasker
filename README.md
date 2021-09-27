@@ -58,3 +58,23 @@ Las tareas que se van creando para ir moviendo por los diferentes estados y desc
 
 ### SubTask (subtareas)
 subtareas que componen una tarea específica, estas pueden ser resueltas y marcadas como tal mediante un checkbox, hasta ser cumplidas todas y así resuelto la tarea que componen estas subtareas
+
+
+
+
+
+Saludos,
+
+En conversaciones anteriores me pidieron algunos ejemplos de código, aquí les tengo un deploy que hice el fin de semana de un proyecto personal que utilizamos para gestionar algunos proyectos durante un tiempo que no teníamos acceso a Trello.com y otras plataformas de este tipo en la empresa que trabajaba
+
+Plataforma: https://tasker-app-node.herokuapp.com  **usuario de prueba:** user_test  |   **pass:** usertest
+
+Repo GitHub: https://github.com/leandrojc88/Tasker, leer el Readme.md para obtener información básica del funcionamiento del sistema 
+
+importante algunos aspectos:
+
+1ro - las tecnologías que utilice en este proyecto son [ Vuejs, Node(Express), postgres, deploy en Heroku ], no utilice Symfony porque estaba incursionando en Nodejs, la intención es que pueden ver que tengo experiencia en el desarrollo de software y soy capaz de adaptarme a cualquier tecnología rápidamente, de hecho en 2020 y 2021 he trabajado con Backend [Node, Symfony y Django] y Frontend [Vuejs, JQuery, Boostrap, Vuetify(MD)] en distintos proyectos según las exigencias de la empresa 
+
+2do - El proyecto puede tener algunos pequeños bugs y notaran que algunas funcionalidades esta incompletas porque finalmente detuve el desarrollo, por cuestiones de tiempo. Mi intención como menciono anteriormente es demostrar que tengo experiencia como desarrollador web
+
+3ro - estoy trabajando en otros ejemplos parecidos de código con Symfony.

@@ -5,7 +5,9 @@
   "scripts": {
     "start": "nodemon ./api/index.js",
     "init": "node ./api/security/init",
-    "api": "nodemon ./api"
+    "api": "nodemon ./api",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "@babel/cli": "^7.15.7",

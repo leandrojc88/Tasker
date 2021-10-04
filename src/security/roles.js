@@ -5,7 +5,7 @@
  *    default : modulo inicial por defecto del rol
  * }
 */
-export const R_ADMIN = { id: 1, name: "Admin", default: "Admin" }
+export const R_ADMIN = { id: 1, name: "Admin", default: "App" }
 export const R_SYSTEM_USER = { id: 2, name: "System User", default: "App" }
 
 // esportar el [Array] de todos los roles del sistema

@@ -28,8 +28,6 @@ este modulo solo tendrá acceso los *administradores*, modulo con las funcionali
 
 este es el modulo principal de la App, donde se crean y planifican los proyectos con sus tableros, tareas y subtareas, 
 
-
-
 ![image-20210927164304107](/md-img/nuevo-proyecto.png)
 
 ![image-20210927164720669](/md-img/dashboard.png)

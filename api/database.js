@@ -16,12 +16,12 @@ const sequelize = new Sequelize(
         port: configs.DB_PORT,
         dialect: configs.DB_DIALECT,
         logging: false,
-        // dialectOptions: {
-        //     ssl: {
-        //         require: true,
-        //         rejectUnauthorized: false
-        //     }
-        // },
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        },
         define: {
             //stop the auto-pluralization performed by Sequelize
             freezeTableName: true,
